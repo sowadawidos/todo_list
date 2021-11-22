@@ -34,7 +34,7 @@ export const TaskInput = ({setTasks}) => {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <InputBox style={{flex: 1}}>
+                <InputBox>
                     <Input
                         placeholder="Type your tasks for today"
                         onChangeText={text => setInput(text)}
