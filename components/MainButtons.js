@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 
 export const MainButtons = ({navigation}) => {
