@@ -8,9 +8,6 @@ export const MainButtons = ({navigation}) => {
             <StyledButton onPress={() => navigation.navigate('MainPage')}>
                 <StyledTextButton>Today</StyledTextButton>
             </StyledButton>
-            <StyledButton onPress={() => navigation.navigate('DoneTasks')}>
-                <StyledTextButton>Done tasks</StyledTextButton>
-            </StyledButton>
         </>
     )
 }
@@ -19,7 +16,7 @@ const StyledButton = styled.TouchableOpacity`
   width: 250px;
   height: 70px;
   border-radius: 10px;
-  border: 1px solid #baefe2;
+  border: 1px solid black;
   display: flex;
   justify-content: center;
   align-content: center;
