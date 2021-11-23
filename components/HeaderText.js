@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 
 export const HeaderText = () => {
