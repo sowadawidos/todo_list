@@ -3,24 +3,30 @@ import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput}
 import styled from 'styled-components/native'
 import {Task} from "./Task";
 import {TaskInput} from "./TaskInput";
+import axios from "axios";
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        axios.get('https://sheet.best/api/sheets/a7a820d7-7507-445e-af71-b820116fcd38')
+            .then(({data}) => setData(data))
+    }, [tasks])
 
     return (
         <>
             <View style={styles.mainPageBox}>
                 <ScrollView style={styles.taskBox}>
                     {
-                        tasks.length === 0 && <Text>No task today</Text>
+                        data.length === 0 && <Text>No task today</Text>
                     }
                     {
-                        tasks.map((task, index) => task.done ? null :
-                            <Task key={index} index={index} task={task} tasks={tasks} setTasks={setTasks}/>)
+                        data.map((task, key) => <Task key={key} index={key} task={task} tasks={data} setTasks={setTasks}/>)
                     }
                 </ScrollView>
                 <View style={styles.inputBox}>
-                    <TaskInput setTasks={setTasks}/>
+                    <TaskInput setTasks={setTasks} data={data}/>
                 </View>
             </View>
         </>
@@ -37,7 +43,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     inputBox: {
-        height: 100,
+        height: 150,
         padding: 15
     }
 })

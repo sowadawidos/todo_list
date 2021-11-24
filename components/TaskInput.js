@@ -9,21 +9,23 @@ import {
     Keyboard
 } from 'react-native'
 import styled from 'styled-components/native'
+import axios from "axios";
 
-export const TaskInput = ({setTasks}) => {
-    const [input, setInput] = useState()
+export const TaskInput = ({setTasks, data}) => {
+    const [input, setInput] = useState("")
 
     const handleClick = () => {
         if (input) {
             Keyboard.dismiss();
-            setTasks(prev => [
-                ...prev,
-                {
+            if (data.length > 0) {
+                const taskToPost = {
+                    Id: data.length,
                     task: input,
-                    done: false
+                    done: "false"
                 }
-            ])
-            setInput('')
+                axios.post('https://sheet.best/api/sheets/a7a820d7-7507-445e-af71-b820116fcd38', taskToPost)
+                setInput('')
+            }
         } else {
             alert('Input cannot be empty')
         }
@@ -34,9 +36,10 @@ export const TaskInput = ({setTasks}) => {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
+                <InputHeader>Create New Task</InputHeader>
                 <InputBox>
                     <Input
-                        placeholder="Type your tasks for today"
+                        placeholder="Task name"
                         onChangeText={text => setInput(text)}
                         defaultValue={input}
                     />
@@ -49,35 +52,44 @@ export const TaskInput = ({setTasks}) => {
         </>
     )
 }
+const InputHeader = styled.Text({
+    fontSize: 16,
+    fontWeight: 600,
+    marginBottom: 5
+})
 
-const InputBox = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
+const InputBox = styled.View({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+})
 
-const Input = styled.TextInput`
-  border: 1px solid black;
-  height: 45px;
-  width: 300px;
-  border-radius: 10px;
-  padding-left: 7px;
-`;
+const Input = styled.TextInput({
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'black',
+    height: 45,
+    width: 300,
+    borderRadius: 10,
+    paddingLeft: 7
+})
 
-const InputButton = styled.TouchableOpacity`
-  width: 40px;
-  height: 40px;
-  border: 1px solid black;
-  text-align: center;
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-`;
+const InputButton = styled.TouchableOpacity({
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'black',
+    textAlign: 'center',
+    borderRadius: 25,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10
+})
 
-const InputButtonText = styled.Text`
-  font-size: 25px;
-`;
+const InputButtonText = styled.Text({
+    fontSize: 25
+})
 
