@@ -16,19 +16,24 @@ export const MainPage = () => {
   const [data, setData] = useState([]);
   const [activity, setActivity] = useState(true);
 
-  useEffect(() => {
-    const axiosGet = async () => {
-      await axios
-        .get(
-          "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93"
-        )
-        .then(({ data }) => setData(data))
-        .then(() => setActivity(false))
-        .catch((err) => console.log(err));
-    };
-    axiosGet();
-  }, []);
+  const axiosGet = async () => {
+    await axios
+      .get("https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f")
+      .then(({ data }) => setData(data))
+      .then(() => setActivity(false))
+      .catch((err) => console.log(err));
+  };
 
+  // const axiosPost = async () => {
+  //   await axios
+  //       .post('https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93', tasks)
+  // }
+
+  useEffect(() => {
+    axiosGet();
+  }, [tasks]);
+
+  console.log(tasks);
   return (
     <>
       <View style={styles.mainPageBox}>
@@ -40,6 +45,7 @@ export const MainPage = () => {
             color={colors.BORDER_COLOR}
           />
           {data.length === 0 && !activity && <Text>No task today</Text>}
+
           {data.map((task, key) => (
             <Task
               key={key}

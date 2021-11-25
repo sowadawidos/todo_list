@@ -10,6 +10,7 @@ import {
   InputButton,
   InputButtonText,
 } from "./styled";
+import { colors } from "../../assets/colors/theme";
 
 export const TaskInput = ({ setTasks, data }) => {
   const [input, setInput] = useState("");
@@ -25,7 +26,7 @@ export const TaskInput = ({ setTasks, data }) => {
         };
         axios
           .post(
-            "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93",
+            "https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f",
             taskToPost
           )
           .catch((err) => console.log(err));
@@ -40,7 +41,7 @@ export const TaskInput = ({ setTasks, data }) => {
         };
         axios
           .post(
-            "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93",
+            "https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f",
             taskToPost
           )
           .catch((err) => console.log(err));
@@ -60,6 +61,7 @@ export const TaskInput = ({ setTasks, data }) => {
         <InputBox>
           <Input
             placeholder="Task name"
+            placeholderTextColor={colors.PLACEHOLDER_COLOR}
             onChangeText={(text) => setInput(text)}
             defaultValue={input}
           />

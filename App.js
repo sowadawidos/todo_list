@@ -19,13 +19,18 @@ export default function App() {
             headerStyle: {
               backgroundColor: colors.HEADER_NAV_COLOR,
             },
+            headerShadowVisible: false
           }}
         />
         <Stack.Screen
           name="MainPage"
           options={{
             title: "Today",
-            headerStyle: { backgroundColor: colors.HEADER_NAV_COLOR },
+            headerStyle: {
+              backgroundColor: colors.HEADER_NAV_COLOR,
+              borderWidth: 0,
+            },
+            headerShadowVisible: false,
           }}
           component={MainPage}
         />

@@ -21,7 +21,7 @@ export const Task = ({ task, tasks, index, setTasks }) => {
     clonedTasks[index].done = "true";
     axios
       .put(
-        `https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93/${index}`,
+        `https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f/${index}`,
         {
           Id: index + 1,
           task: task.task,
@@ -34,11 +34,14 @@ export const Task = ({ task, tasks, index, setTasks }) => {
   };
 
   const handleDeleteTask = () => {
+    const clonedTasks = [...tasks];
+    clonedTasks.splice(index, 1);
     axios
       .delete(
-        `https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93/${index}`
+        `https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f/${index}`
       )
       .catch((err) => console.log(err));
+    setTasks(clonedTasks);
   };
 
   if (task.done) {
@@ -97,6 +100,6 @@ const styles = StyleSheet.create({
     width: 270,
   },
   taskText: {
-    fontWeight: Platform.OS === "android" ? "600" : "normal",
+    fontWeight: Platform.OS === "android" ? "700" : "600",
   },
 });
