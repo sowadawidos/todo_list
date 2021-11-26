@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from "react-native";
 import { Home } from "./components/Home/Home";
 import { MainPage } from "./components/MainPage/MainPage";
-import { colors } from "./assets/colors/theme";
+import { colors } from "./theme";
 
 const Stack = createNativeStackNavigator();
 

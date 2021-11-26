@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-import { colors } from "../../assets/colors/theme";
+import { colors } from "../../theme";
 
 export const DoneButton = styled.TouchableOpacity({
   width: 30,

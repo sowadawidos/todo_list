@@ -5,7 +5,7 @@ import { View, StyleSheet } from "react-native";
 import { HeaderText } from "../HeaderText/HeaderText";
 import { MainButtons } from "../MainButtons/MainButtons";
 
-import { colors } from "../../assets/colors/theme";
+import { colors } from "../../theme";
 
 export const Home = ({ navigation }) => {
   return (

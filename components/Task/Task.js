@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Platform, Alert } from "react-native";
 
 import axios from "axios";
 
@@ -13,35 +13,39 @@ import {
   TaskBoxDone,
 } from "./styled";
 
+import { API } from "../../API";
+
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-export const Task = ({ task, tasks, index, setTasks }) => {
-  const handleTaskChange = () => {
-    const clonedTasks = [...tasks];
-    clonedTasks[index].done = "true";
-    axios
-      .put(
-        `https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f/${index}`,
-        {
-          Id: index + 1,
-          task: task.task,
-          done: "true",
-        }
-      )
-      .catch((err) => console.log(err));
-    // console.log(clonedTasks)
-    setTasks(clonedTasks);
+export const Task = ({ task, index, getTasks, setActivity }) => {
+  const handleTaskChange = async () => {
+    setActivity(true);
+    try {
+      const response = await axios.put(`${API}/${index}`, {
+        Id: index + 1,
+        task: task.task,
+        done: "true",
+      });
+
+      if (!response.data) throw Error;
+
+      getTasks();
+    } catch {
+      Alert.alert("There is error updating your task.");
+    }
   };
 
-  const handleDeleteTask = () => {
-    const clonedTasks = [...tasks];
-    clonedTasks.splice(index, 1);
-    axios
-      .delete(
-        `https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f/${index}`
-      )
-      .catch((err) => console.log(err));
-    setTasks(clonedTasks);
+  const handleDeleteTask = async () => {
+    setActivity(true);
+    try {
+      const response = await axios.delete(`${API}/${index}`);
+
+      if (!response.data) throw Error;
+
+      getTasks();
+    } catch {
+      Alert.alert("There is error deleting your task.");
+    }
   };
 
   if (task.done) {

@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { colors } from "../../assets/colors/theme";
+import { colors } from "../../theme";
 import { Platform } from "react-native";
 
 export const StyledButton = styled.TouchableOpacity({
