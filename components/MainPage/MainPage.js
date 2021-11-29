@@ -7,34 +7,38 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+
 import { Task } from "../Task/Task";
 import { TaskInput } from "../TaskInput/TaskInput";
 
-import axios from "axios";
-
 import { colors } from "../../theme";
-import { API } from "../../API";
+import { fetchData } from "../../API";
 
 export const MainPage = () => {
   const [tasks, setTasks] = useState([]);
-  const [activity, setActivity] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const axiosGet = async () => {
+  const fetchTodoList = async () => {
     try {
-      const response = await axios.get(API);
+      const response = await fetchData("get");
 
       if (!response.data) throw Error;
 
       setTasks(response.data);
-      setActivity(false);
+      setIsLoading(false);
     } catch {
-      Alert.alert("Something went wrong. Try again.");
+      Alert.alert("Something went wrong. Try again.", "", [
+        { text: "Reload", onPress: () => fetchTodoList(), style: "cancel" },
+        { text: "Cancel" },
+      ]);
     }
   };
 
   useEffect(() => {
-    axiosGet();
+    fetchTodoList();
   }, []);
 
   return (
@@ -44,28 +48,32 @@ export const MainPage = () => {
           <ActivityIndicator
             style={styles.loader}
             size="large"
-            animating={activity}
+            animating={isLoading}
             color={colors.PLACEHOLDER_COLOR}
           />
-          {tasks.length === 0 && !activity && <Text>No task today</Text>}
+          {tasks.length === 0 && !isLoading && <Text>No task today</Text>}
 
           {tasks.map((task, key) => (
             <Task
               key={key}
               index={key}
               task={task}
-              getTasks={axiosGet}
-              setActivity={setActivity}
+              fetchTodoList={fetchTodoList}
+              setIsLoading={setIsLoading}
             />
           ))}
         </ScrollView>
-        <View style={styles.inputBox}>
-          <TaskInput
-            data={tasks}
-            getTasks={axiosGet}
-            setActivity={setActivity}
-          />
-        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.inputBox}>
+            <TaskInput
+              data={tasks}
+              fetchTodoList={fetchTodoList}
+              setIsLoading={setIsLoading}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </>
   );
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputBox: {
-    height: 150,
+    height: 200,
     padding: 15,
   },
   loader: {

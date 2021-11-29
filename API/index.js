@@ -1,4 +1,12 @@
 import axios from "axios";
 
-export const API =
-  "https://sheet.best/api/sheets/bf2c2186-a6dd-41f2-8a59-1ebaa571015f";
+const API_URL =
+  "https://sheet.best/api/sheets/c55a2e96-a82e-4958-a5a1-81375fca3ef4";
+
+export const fetchData = (method, body = null, path = "") => {
+  return axios({
+    method: method,
+    url: API_URL + path,
+    data: body ? {...body} : undefined
+  });
+};

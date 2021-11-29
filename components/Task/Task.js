@@ -2,8 +2,6 @@ import React from "react";
 
 import { View, Text, StyleSheet, Platform, Alert } from "react-native";
 
-import axios from "axios";
-
 import {
   DeleteButton,
   DoneButton,
@@ -13,36 +11,43 @@ import {
   TaskBoxDone,
 } from "./styled";
 
-import { API } from "../../API";
+import { fetchData } from "../../API";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-export const Task = ({ task, index, getTasks, setActivity }) => {
+export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
   const handleTaskChange = async () => {
-    setActivity(true);
+    setIsLoading(true);
+
+    const body = {
+      Id: index + 1,
+      task: task.task,
+      done: "true",
+    };
+
     try {
-      const response = await axios.put(`${API}/${index}`, {
-        Id: index + 1,
-        task: task.task,
-        done: "true",
-      });
+      const response = await fetchData("put", body, `/${index}`);
+
+      setIsLoading(true);
 
       if (!response.data) throw Error;
 
-      getTasks();
+      fetchTodoList();
     } catch {
       Alert.alert("There is error updating your task.");
     }
   };
 
   const handleDeleteTask = async () => {
-    setActivity(true);
+    setIsLoading(true);
     try {
-      const response = await axios.delete(`${API}/${index}`);
+      const response = await fetchData("delete", null, `/${index}`);
+
+      setIsLoading(true);
 
       if (!response.data) throw Error;
 
-      getTasks();
+      fetchTodoList();
     } catch {
       Alert.alert("There is error deleting your task.");
     }
