@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, Keyboard } from "react-native";
-
-import axios from "axios";
+import { Keyboard, Alert } from "react-native";
 
 import {
   InputHeader,
@@ -11,63 +9,61 @@ import {
   InputButtonText,
 } from "./styled";
 
-export const TaskInput = ({ setTasks, data }) => {
+//TODO: Try to configure the project to don't need to access all the things in this way
+// and do instead something like import { colors } from "theme" or import { fetchData } from "API";
+import { colors } from "../../theme";
+import { fetchData } from "../../API";
+
+export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
   const [input, setInput] = useState("");
 
-  const handleClick = () => {
-    if (input) {
-      Keyboard.dismiss();
-      if (data.length > 0) {
-        const taskToPost = {
-          Id: data.length,
-          task: input,
-          done: "false",
-        };
-        axios
-          .post(
-            "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93",
-            taskToPost
-          )
-          .catch((err) => console.log(err));
-        setInput("");
-        // setTasks(prev => [...prev, taskToPost])
-        // can I use this as a dependency to reload component is UseEffect instead of checking the state change Data??
-      } else if (data.length === 0) {
-        const taskToPost = {
-          Id: 1,
-          task: input,
-          done: "false",
-        };
-        axios
-          .post(
-            "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93",
-            taskToPost
-          )
-          .catch((err) => console.log(err));
-        setInput("");
-      }
-    } else {
-      alert("Input cannot be empty");
+  const handleClick = async () => {
+    setIsLoading(true);
+
+    if (!input.length) {
+      Alert.alert("Input cannot be empty");
+      return fetchTodoList()
+    }
+
+    Keyboard.dismiss();
+
+    const taskToPost = {
+      //TODO: Id should be id instead
+      Id: data.length,
+      task: input,
+      //QUESTION: Why false is string and not a boolean value?
+      done: "false",
+    };
+
+    try {
+      const response = await fetchData("post", taskToPost);
+
+      setIsLoading(true);
+
+      if (!response.data) throw Error;
+
+      fetchTodoList();
+
+      setInput("");
+    } catch {
+      Alert.alert("Something went wrong with adding your task. Try again.");
     }
   };
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <InputHeader>Create New Task</InputHeader>
-        <InputBox>
-          <Input
-            placeholder="Task name"
-            onChangeText={(text) => setInput(text)}
-            defaultValue={input}
-          />
-          <InputButton onPress={handleClick}>
-            <InputButtonText>+</InputButtonText>
-          </InputButton>
-        </InputBox>
-      </KeyboardAvoidingView>
+      <InputHeader>Create New Task</InputHeader>
+      <InputBox>
+        <Input
+          placeholder="Task name"
+          placeholderTextColor={colors.PLACEHOLDER_COLOR}
+          onChangeText={(text) => setInput(text)}
+          defaultValue={input}
+        />
+        <InputButton onPress={handleClick}>
+          <InputButtonText>+</InputButtonText>
+        </InputButton>
+      </InputBox>
     </>
   );
 };

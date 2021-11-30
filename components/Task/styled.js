@@ -1,13 +1,13 @@
 import styled from "styled-components/native";
 
-import { colors } from "../../assets/colors/theme";
+import { colors } from "../../theme";
 
 export const DoneButton = styled.TouchableOpacity({
   width: 30,
   height: 30,
   borderWidth: 1,
   borderStyle: "solid",
-  borderColor: colors.BORDER_COLOR,
+  borderColor: colors.SECOND_BORDER_COLOR,
   textAlign: "center",
   borderRadius: 25,
   display: "flex",
@@ -38,9 +38,10 @@ export const TaskBox = styled.View({
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-  borderWidth: 1,
+  borderWidth: 2,
   borderStyle: "solid",
-  borderColor: colors.SECOND_BORDER_COLOR,
+  borderColor: colors.BORDER_COLOR,
+  backgroundColor: colors.BACKGROUND_INPUT_COLOR,
   padding: 10,
   borderRadius: 10,
   marginBottom: 10,
@@ -51,9 +52,10 @@ export const TaskBoxDone = styled.View({
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-  borderWidth: 1,
+  borderWidth: 2,
   borderStyle: "solid",
   borderColor: colors.BORDER_COLOR,
+  backgroundColor: colors.BACKGROUND_INPUT_COLOR,
   padding: 10,
   borderRadius: 10,
   marginBottom: 10,

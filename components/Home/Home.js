@@ -1,15 +1,16 @@
 import React from "react";
 
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 
 import { HeaderText } from "../HeaderText/HeaderText";
 import { MainButtons } from "../MainButtons/MainButtons";
 
-import { colors } from "../../assets/colors/theme";
+import { colors } from "../../theme";
 
 export const Home = ({ navigation }) => {
   return (
     <>
+      <StatusBar barStyle='dark-content'/>
       <View style={styles.mainBox}>
         <View style={styles.headerBox}>
           <HeaderText />
@@ -22,6 +23,7 @@ export const Home = ({ navigation }) => {
   );
 };
 
+//TODO: Put this in other file
 const styles = StyleSheet.create({
   mainBox: {
     flex: 1,

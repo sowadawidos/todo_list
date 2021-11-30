@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from "react";
+
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+
 import { Task } from "../Task/Task";
 import { TaskInput } from "../TaskInput/TaskInput";
-import axios from "axios";
-import { colors } from "../../assets/colors/theme";
+
+import { colors } from "../../theme";
+import { fetchData } from "../../API";
 
 export const MainPage = () => {
   const [tasks, setTasks] = useState([]);
-  const [data, setData] = useState([]);
-  const [activity, setActivity] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchTodoList = async () => {
+    try {
+      const response = await fetchData("get");
+
+      if (!response.data) throw Error;
+
+      setTasks(response.data);
+      setIsLoading(false);
+    } catch {
+      Alert.alert("Something went wrong. Try again.", "", [
+        { text: "Reload", onPress: () => fetchTodoList(), style: "cancel" },
+        { text: "Cancel" },
+      ]);
+    }
+  };
 
   useEffect(() => {
-    const axiosGet = async () => {
-      await axios
-        .get(
-          "https://sheet.best/api/sheets/43088ab0-8ed9-40f0-966e-d19ef3100b93"
-        )
-        .then(({ data }) => setData(data))
-        .then(() => setActivity(false))
-        .catch((err) => console.log(err));
-    };
-    axiosGet();
+    fetchTodoList();
   }, []);
 
   return (
@@ -36,28 +48,43 @@ export const MainPage = () => {
           <ActivityIndicator
             style={styles.loader}
             size="large"
-            animating={activity}
-            color={colors.BORDER_COLOR}
+            animating={isLoading}
+            color={colors.PLACEHOLDER_COLOR}
           />
-          {data.length === 0 && !activity && <Text>No task today</Text>}
-          {data.map((task, key) => (
+
+          {tasks.length === 0 && !isLoading && <Text>No task today</Text>}
+
+          {/* TODO: The use of FlatList component from React Native is missing */}
+          {tasks.map((task, key) => (
             <Task
               key={key}
               index={key}
               task={task}
-              tasks={data}
-              setTasks={setTasks}
+              fetchTodoList={fetchTodoList}
+              setIsLoading={setIsLoading}
             />
           ))}
+
         </ScrollView>
-        <View style={styles.inputBox}>
-          <TaskInput setTasks={setTasks} data={data} />
-        </View>
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.inputBox}>
+            <TaskInput
+              data={tasks}
+              fetchTodoList={fetchTodoList}
+              setIsLoading={setIsLoading}
+            />
+          </View>
+        </KeyboardAvoidingView>
+
       </View>
     </>
   );
 };
 
+//TODO: Put this in a separate file
 const styles = StyleSheet.create({
   mainPageBox: {
     flex: 1,
@@ -68,10 +95,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputBox: {
-    height: 150,
+    height: 200,
     padding: 15,
   },
   loader: {
     textAlign: "center",
+    marginBottom: 5,
   },
 });
