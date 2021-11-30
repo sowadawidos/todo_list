@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+//TODO: Use a linter to catch things like this when you are not using some imports
 import { StyleSheet, Text, View } from "react-native";
+
 import { Home } from "./components/Home/Home";
 import { MainPage } from "./components/MainPage/MainPage";
 import { colors } from "./theme";

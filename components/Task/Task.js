@@ -53,6 +53,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     }
   };
 
+  //TODO: Refactor this part, a lot of code is duplicated, try to find a better way of implementation
   if (task.done) {
     return (
       <>

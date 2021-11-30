@@ -51,8 +51,10 @@ export const MainPage = () => {
             animating={isLoading}
             color={colors.PLACEHOLDER_COLOR}
           />
+
           {tasks.length === 0 && !isLoading && <Text>No task today</Text>}
 
+          {/* TODO: The use of FlatList component from React Native is missing */}
           {tasks.map((task, key) => (
             <Task
               key={key}
@@ -62,7 +64,9 @@ export const MainPage = () => {
               setIsLoading={setIsLoading}
             />
           ))}
+
         </ScrollView>
+
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
@@ -74,11 +78,13 @@ export const MainPage = () => {
             />
           </View>
         </KeyboardAvoidingView>
+
       </View>
     </>
   );
 };
 
+//TODO: Put this in a separate file
 const styles = StyleSheet.create({
   mainPageBox: {
     flex: 1,

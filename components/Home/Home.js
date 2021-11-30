@@ -23,6 +23,7 @@ export const Home = ({ navigation }) => {
   );
 };
 
+//TODO: Put this in other file
 const styles = StyleSheet.create({
   mainBox: {
     flex: 1,

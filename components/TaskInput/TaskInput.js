@@ -9,6 +9,8 @@ import {
   InputButtonText,
 } from "./styled";
 
+//TODO: Try to configure the project to don't need to access all the things in this way
+// and do instead something like import { colors } from "theme" or import { fetchData } from "API";
 import { colors } from "../../theme";
 import { fetchData } from "../../API";
 
@@ -18,14 +20,18 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
   const handleClick = async () => {
     setIsLoading(true);
 
-    if (!input.length)
-      return fetchTodoList() && Alert.alert("Input cannot be empty");
+    if (!input.length) {
+      Alert.alert("Input cannot be empty");
+      return fetchTodoList()
+    }
 
     Keyboard.dismiss();
 
     const taskToPost = {
+      //TODO: Id should be id instead
       Id: data.length,
       task: input,
+      //QUESTION: Why false is string and not a boolean value?
       done: "false",
     };
 

@@ -1,5 +1,7 @@
+//TODO: Rename the folder to api instead of API
 import axios from "axios";
 
+//TODO: Take this value from .env file - This sensitive information should not be exposed on the app itself
 const API_URL =
   "https://sheet.best/api/sheets/c55a2e96-a82e-4958-a5a1-81375fca3ef4";
 
