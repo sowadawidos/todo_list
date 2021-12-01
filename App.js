@@ -16,6 +16,7 @@ export default function App() {
                     name="Home"
                     component={Home}
                     options={{
+                        title: '',
                         headerStyle: {
                             backgroundColor: colors.HEADER_NAV_COLOR,
                         },
@@ -25,7 +26,7 @@ export default function App() {
                 <Stack.Screen
                     name="MainPage"
                     options={{
-                        title: 'Today',
+                        title: 'Tasks',
                         headerStyle: {
                             backgroundColor: colors.HEADER_NAV_COLOR,
                             borderWidth: 0,

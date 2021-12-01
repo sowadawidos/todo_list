@@ -3,7 +3,7 @@ import styled from '@emotion/native'
 import { colors } from '../../theme'
 import { Platform } from 'react-native'
 
-export const InputHeader = styled.Text({
+export const InputHeaderText = styled.Text({
     fontSize: Platform.OS === 'android' ? 20 : 18,
     fontWeight: Platform.OS === 'android' ? '700' : '600',
     marginBottom: 5,
@@ -14,6 +14,7 @@ export const InputBox = styled.View({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 20,
 })
 
 export const Input = styled.TextInput({
@@ -39,9 +40,21 @@ export const InputButton = styled.TouchableOpacity({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
 })
 
 export const InputButtonText = styled.Text({
     fontSize: 25,
+})
+
+export const InputHeader = styled.View({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+})
+
+export const InputCounter = styled.Text({
+    marginRight: 60,
+    fontSize: 12,
+    color: colors.PLACEHOLDER_COLOR,
 })

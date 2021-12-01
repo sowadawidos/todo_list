@@ -3,10 +3,12 @@ import { Keyboard, Alert } from 'react-native'
 
 import {
     InputHeader,
+    InputHeaderText,
     InputBox,
     Input,
     InputButton,
     InputButtonText,
+    InputCounter,
 } from './styled'
 
 import { colors } from 'theme'
@@ -51,13 +53,23 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
 
     return (
         <>
-            <InputHeader>Create New Task</InputHeader>
+            <InputHeader>
+                <InputHeaderText>Create New Task</InputHeaderText>
+                <InputCounter>{input.length}/30</InputCounter>
+            </InputHeader>
             <InputBox>
                 <Input
                     placeholder="Task name"
                     placeholderTextColor={colors.PLACEHOLDER_COLOR}
                     onChangeText={(text) => setInput(text)}
                     defaultValue={input}
+                    maxLength={30}
+                    style={
+                        input.length === 30 && {
+                            borderColor: 'red',
+                            borderWidth: 1,
+                        }
+                    }
                 />
                 <InputButton onPress={handleClick}>
                     <InputButtonText>+</InputButtonText>

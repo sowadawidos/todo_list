@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { View, Text, Alert } from 'react-native'
+import { View, Text, Alert, Keyboard, StyleSheet } from 'react-native'
 
 import {
     DeleteButton,
@@ -9,14 +9,23 @@ import {
     DoneButtonTrue,
     TaskBox,
     TaskBoxDone,
+    ModalInput,
+    ModalInputCounter,
+    ModalInputContainer,
+    EditButton,
 } from './styled'
 
 import { fetchData } from 'api'
 import { styles } from 'styles'
 
-import { EvilIcons, AntDesign } from '@expo/vector-icons'
+import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
+import { colors } from 'theme'
+import { BottomSheets } from 'components/BottomSheets/BottomSheets'
 
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
+    const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
+    const [input, setInput] = useState(task.task)
+
     const handleTaskChange = async () => {
         setIsLoading(true)
 
@@ -35,11 +44,94 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             fetchTodoList()
         } catch {
+            Alert.alert('There is error updating your task.')
+        }
+    }
+
+    const handleEditTask = async () => {
+        await setIsShowingBottomSheets(false)
+        setIsLoading(true)
+
+        if (!input.length) {
+            setIsShowingBottomSheets(true)
+            Alert.alert('Input cannot be empty')
+        }
+
+        Keyboard.dismiss()
+
+        const body = {
+            id: index,
+            task: input,
+            done: task.done,
+        }
+
+        try {
+            const response = await fetchData('put', body, `/${index}`)
+
+            setIsLoading(true)
+
+            if (!response.data) throw Error
+
+            fetchTodoList()
+        } catch {
             Alert.alert('There is error updating your task')
         }
     }
 
+    const toggleBottomNavigationView = () => {
+        setIsShowingBottomSheets(!isShowingBottomSheets)
+    }
+
+    const loadingModal = () => (
+        <>
+            <View
+                style={{
+                    height: 150,
+                    marginTop: 40,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                }}
+            >
+                <View>
+                    <ModalInputContainer>
+                        <ModalInputCounter>{input.length}/30</ModalInputCounter>
+                    </ModalInputContainer>
+                    <ModalInput
+                        placeholder="Task name"
+                        placeholderTextColor={colors.PLACEHOLDER_COLOR}
+                        onChangeText={(text) => setInput(text)}
+                        defaultValue={input}
+                        maxLength={30}
+                        style={
+                            input.length === 30 && {
+                                borderColor: 'red',
+                                borderWidth: 1,
+                            }
+                        }
+                    />
+                </View>
+                <View style={styles.bottomSheetButtonsView}>
+                    <DoneButton
+                        style={{ marginLeft: 10 }}
+                        onPress={handleEditTask}
+                    >
+                        <Feather name="edit-2" size={15} color="black" />
+                    </DoneButton>
+                    <DeleteButton
+                        style={{ marginLeft: 10 }}
+                        onPress={handleDeleteTask}
+                    >
+                        <DoneButtonText>
+                            <EvilIcons name="trash" size={25} color="black" />
+                        </DoneButtonText>
+                    </DeleteButton>
+                </View>
+            </View>
+        </>
+    )
+
     const handleDeleteTask = async () => {
+        setIsShowingBottomSheets(false)
         setIsLoading(true)
         try {
             const response = await fetchData('delete', null, `/${index}`)
@@ -55,7 +147,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     }
 
     //TODO: Refactor this part, a lot of code is duplicated, try to find a better way of implementation
-    //I will refactor it tomorrow
+    //I will refactor it tomorrow (I can't bring myself to do it :D)
     if (task.done) {
         return (
             <>
@@ -63,25 +155,29 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                     <View style={styles.taskTextBox}>
                         <Text style={styles.taskText}>{task.task}</Text>
                     </View>
-                    {task.done === 'true' || task.done === 'TRUE' ? (
-                        <DoneButtonTrue disabled>
-                            <DoneButtonText>
-                                <AntDesign
-                                    name="check"
-                                    size={24}
-                                    color="black"
-                                />
-                            </DoneButtonText>
-                        </DoneButtonTrue>
-                    ) : (
-                        <DoneButton onPress={handleTaskChange} />
-                    )}
-                    <DeleteButton onPress={handleDeleteTask}>
-                        <DoneButtonText>
-                            <EvilIcons name="trash" size={25} color="black" />
-                        </DoneButtonText>
-                    </DeleteButton>
+                    <View style={{flexDirection: 'row'}}>
+                        {task.done === 'true' || task.done === 'TRUE' ? (
+                            <DoneButtonTrue disabled>
+                                <DoneButtonText>
+                                    <AntDesign
+                                        name="check"
+                                        size={20}
+                                        color="black"
+                                    />
+                                </DoneButtonText>
+                            </DoneButtonTrue>
+                        ) : <DoneButton onPress={handleTaskChange} />}
+                        <DoneButton style={{marginLeft: 10}} onPress={toggleBottomNavigationView}>
+                            <Feather name="more-vertical" size={18} color="black" />
+                        </DoneButton>
+                    </View>
                 </TaskBoxDone>
+                <BottomSheets
+                    text={'Edit task'}
+                    isShowingBottomSheets={isShowingBottomSheets}
+                    toggleBottomNavigationView={toggleBottomNavigationView}
+                    loadingModal={loadingModal}
+                />
             </>
         )
     } else {
@@ -104,11 +200,6 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                     ) : (
                         <DoneButton onPress={handleTaskChange} />
                     )}
-                    <DeleteButton onPress={handleDeleteTask}>
-                        <DoneButtonText>
-                            <EvilIcons name="trash" size={25} color="black" />
-                        </DoneButtonText>
-                    </DeleteButton>
                 </TaskBox>
             </>
         )
