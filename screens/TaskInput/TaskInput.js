@@ -26,8 +26,7 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
         Keyboard.dismiss()
 
         const taskToPost = {
-            //I see when I want to post 0 number in google sheets its "" so I put string and now that works
-            id: data.length === 0 ? '0' : data.length,
+            id: data.length.toString(),
             task: input,
             //QUESTION: Why false is string and not a boolean value?
             done: 'false',
