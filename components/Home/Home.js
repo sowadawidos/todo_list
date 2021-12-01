@@ -1,42 +1,24 @@
-import React from "react";
+import React from 'react'
 
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StatusBar } from 'react-native'
 
-import { HeaderText } from "../HeaderText/HeaderText";
-import { MainButtons } from "../MainButtons/MainButtons";
+import { HeaderText } from 'components/HeaderText/HeaderText'
+import { MainButtons } from 'components/MainButtons/MainButtons'
 
-import { colors } from "../../theme";
+import { styles } from 'styles'
 
 export const Home = ({ navigation }) => {
-  return (
-    <>
-      <StatusBar barStyle='dark-content'/>
-      <View style={styles.mainBox}>
-        <View style={styles.headerBox}>
-          <HeaderText />
-        </View>
-        <View style={styles.mainButtonsBox}>
-          <MainButtons navigation={navigation} />
-        </View>
-      </View>
-    </>
-  );
-};
-
-//TODO: Put this in other file
-const styles = StyleSheet.create({
-  mainBox: {
-    flex: 1,
-    backgroundColor: colors.BACKGROUND_COLOR,
-  },
-  headerBox: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  mainButtonsBox: {
-    flex: 3,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+    return (
+        <>
+            <StatusBar barStyle="dark-content" />
+            <View style={styles.mainBox}>
+                <View style={styles.headerBox}>
+                    <HeaderText />
+                </View>
+                <View style={styles.mainButtonsBox}>
+                    <MainButtons navigation={navigation} />
+                </View>
+            </View>
+        </>
+    )
+}
