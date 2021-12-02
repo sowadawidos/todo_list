@@ -12,7 +12,6 @@ import {
     ModalInput,
     ModalInputCounter,
     ModalInputContainer,
-    EditButton,
 } from './styled'
 
 import { fetchData } from 'api'
@@ -34,6 +33,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
             task: task.task,
             done: 'true',
         }
+        console.log(body)
 
         try {
             const response = await fetchData('put', body, `/${index}`)
@@ -148,14 +148,14 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
     //TODO: Refactor this part, a lot of code is duplicated, try to find a better way of implementation
     //I will refactor it tomorrow (I can't bring myself to do it :D)
-    if (task.done) {
+    if (task.done)
         return (
             <>
                 <TaskBoxDone>
                     <View style={styles.taskTextBox}>
                         <Text style={styles.taskText}>{task.task}</Text>
                     </View>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         {task.done === 'true' || task.done === 'TRUE' ? (
                             <DoneButtonTrue disabled>
                                 <DoneButtonText>
@@ -166,9 +166,18 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                                     />
                                 </DoneButtonText>
                             </DoneButtonTrue>
-                        ) : <DoneButton onPress={handleTaskChange} />}
-                        <DoneButton style={{marginLeft: 10}} onPress={toggleBottomNavigationView}>
-                            <Feather name="more-vertical" size={18} color="black" />
+                        ) : (
+                            <DoneButton onPress={handleTaskChange} />
+                        )}
+                        <DoneButton
+                            style={{ marginLeft: 10 }}
+                            onPress={toggleBottomNavigationView}
+                        >
+                            <Feather
+                                name="more-vertical"
+                                size={18}
+                                color="black"
+                            />
                         </DoneButton>
                     </View>
                 </TaskBoxDone>
@@ -180,28 +189,4 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                 />
             </>
         )
-    } else {
-        return (
-            <>
-                <TaskBox>
-                    <View style={styles.taskTextBox}>
-                        <Text style={styles.taskText}>{task.task}</Text>
-                    </View>
-                    {task.done ? (
-                        <DoneButton>
-                            <DoneButtonText>
-                                <AntDesign
-                                    name="check"
-                                    size={24}
-                                    color="black"
-                                />
-                            </DoneButtonText>
-                        </DoneButton>
-                    ) : (
-                        <DoneButton onPress={handleTaskChange} />
-                    )}
-                </TaskBox>
-            </>
-        )
-    }
 }

@@ -12,5 +12,5 @@ export const BottomSheetHeaderClose = styled.TouchableOpacity({
     width: 20,
     height: 20,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
 })

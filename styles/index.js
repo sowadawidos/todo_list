@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({
     bottomSheetButtonsView: {
         display: 'flex',
         alignItems: 'center',
-        flexDirection: "row",
+        flexDirection: 'row',
         justifyContent: 'center',
         height: 45,
         paddingTop: 30,
