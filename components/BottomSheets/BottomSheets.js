@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Platform, KeyboardAvoidingView } from 'react-native'
 import { styles } from '../../styles'
 import { BottomSheet } from 'react-native-btr'
 
@@ -19,17 +19,27 @@ export const BottomSheets = ({
                 onBackButtonPress={toggleBottomNavigationView}
                 onBackdropPress={toggleBottomNavigationView}
             >
-                <View style={styles.bottomNavigationView}>
-                    <BottomSheetHeaderBox>
-                        <Text style={styles.bottomSheetHeaderText}>{text}</Text>
-                        <BottomSheetHeaderClose
-                            onPress={toggleBottomNavigationView}
-                        >
-                            <AntDesign name="close" size={24} color="black" />
-                        </BottomSheetHeaderClose>
-                    </BottomSheetHeaderBox>
-                    {loadingModal()}
-                </View>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                >
+                    <View style={styles.bottomNavigationView}>
+                        <BottomSheetHeaderBox>
+                            <Text style={styles.bottomSheetHeaderText}>
+                                {text}
+                            </Text>
+                            <BottomSheetHeaderClose
+                                onPress={toggleBottomNavigationView}
+                            >
+                                <AntDesign
+                                    name="close"
+                                    size={24}
+                                    color="black"
+                                />
+                            </BottomSheetHeaderClose>
+                        </BottomSheetHeaderBox>
+                        {loadingModal()}
+                    </View>
+                </KeyboardAvoidingView>
             </BottomSheet>
         </>
     )

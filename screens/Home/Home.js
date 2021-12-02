@@ -13,10 +13,10 @@ export const Home = ({ navigation }) => {
             <StatusBar barStyle="dark-content" />
             <View style={styles.mainBox}>
                 <View style={styles.headerBox}>
-                    <HeaderText />
+                    <HeaderText text1={"Todo"} text2={"list"}/>
                 </View>
                 <View style={styles.mainButtonsBox}>
-                    <MainButtons navigation={navigation} />
+                    <MainButtons action={() => navigation.navigate('MainPage')} text={"Move to tasks"}/>
                 </View>
             </View>
         </>

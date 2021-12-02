@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 
-import { View, Text, Alert, Keyboard, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    Alert,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native'
 
 import {
     DeleteButton,
@@ -181,6 +188,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                         </DoneButton>
                     </View>
                 </TaskBoxDone>
+
                 <BottomSheets
                     text={'Edit task'}
                     isShowingBottomSheets={isShowingBottomSheets}

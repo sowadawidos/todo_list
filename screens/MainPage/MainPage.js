@@ -22,7 +22,7 @@ import { ModalBox } from 'components/ModalBox/ModalBox'
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    //state for text when fetching time is too long
+    //state for showing text when fetching is taking too long
     const [text, setText] = useState('Loading data')
     const [isEnabled, setIsEnabled] = useState(false)
 

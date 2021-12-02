@@ -70,7 +70,6 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
                             borderWidth: 1,
                         }
                     }
-                    autoFocus={true}
                 />
                 <InputButton onPress={handleClick}>
                     <InputButtonText>+</InputButtonText>
