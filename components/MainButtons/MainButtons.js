@@ -2,11 +2,11 @@ import React from 'react'
 
 import { StyledTextButton, StyledButton } from './styled'
 
-export const MainButtons = ({ navigation }) => {
+export const MainButtons = ({ action, text }) => {
     return (
         <>
-            <StyledButton onPress={() => navigation.navigate('MainPage')}>
-                <StyledTextButton>Today</StyledTextButton>
+            <StyledButton onPress={action}>
+                <StyledTextButton>{text}</StyledTextButton>
             </StyledButton>
         </>
     )

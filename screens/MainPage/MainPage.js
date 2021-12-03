@@ -8,6 +8,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     FlatList,
+    Switch,
 } from 'react-native'
 
 import { Task } from 'screens/Task/Task'
@@ -16,10 +17,25 @@ import { TaskInput } from 'screens/TaskInput/TaskInput'
 import { styles } from 'styles'
 import { colors } from 'theme'
 import { fetchData } from 'api'
+import { ModalBox } from 'components/ModalBox/ModalBox'
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    //state for showing text when fetching is taking too long
+    const [text, setText] = useState('Loading data')
+    const [isEnabled, setIsEnabled] = useState(false)
+
+    const toggleSwitch = () => {
+        if (isEnabled) {
+            setIsLoading(true)
+            setIsEnabled((previousState) => !previousState)
+            return fetchTodoList()
+        }
+        const filteredTask = tasks.filter((task) => task.done === 'TRUE')
+        setIsEnabled((previousState) => !previousState)
+        setTasks(filteredTask)
+    }
 
     const renderItem = ({ item }) => (
         <Task
@@ -30,13 +46,25 @@ export const MainPage = () => {
         />
     )
 
+    const loadingModal = () => (
+        <>
+            <ActivityIndicator
+                style={styles.loader}
+                size="large"
+                animating={isLoading}
+                color={colors.PLACEHOLDER_COLOR}
+            />
+            <Text>{text}</Text>
+        </>
+    )
+
     const fetchTodoList = async () => {
         try {
             const response = await fetchData('get')
 
             if (!response.data) throw Error
 
-            setTasks(response.data)
+            setTasks(response.data.reverse())
             setIsLoading(false)
         } catch {
             Alert.alert('Something went wrong. Try again.', '', [
@@ -45,7 +73,7 @@ export const MainPage = () => {
                     onPress: () => fetchTodoList(),
                     style: 'cancel',
                 },
-                { text: 'Cancel' },
+                { text: 'Cancel', onPress: () => setIsLoading(false) },
             ])
         }
     }
@@ -57,37 +85,53 @@ export const MainPage = () => {
     return (
         <>
             <View style={styles.mainPageBox}>
+                <ModalBox modalOutput={loadingModal} isLoading={isLoading} />
                 <View style={styles.taskBox}>
-                    <ActivityIndicator
-                        style={styles.loader}
-                        size="large"
-                        animating={isLoading}
-                        color={colors.PLACEHOLDER_COLOR}
-                    />
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    >
+                        <View style={styles.inputBox}>
+                            <TaskInput
+                                data={tasks}
+                                fetchTodoList={fetchTodoList}
+                                setIsLoading={setIsLoading}
+                            />
+                            <View style={styles.switchBox}>
+                                <Text style={{ marginRight: 15 }}>
+                                    {isEnabled
+                                        ? 'Show all tasks'
+                                        : 'Show done tasks'}
+                                </Text>
+                                <Switch
+                                    trackColor={{
+                                        false: colors.SWITCH_FALSE_COLOR,
+                                        true: colors.SWITCH_TRUE_COLOR,
+                                    }}
+                                    thumbColor={
+                                        isEnabled
+                                            ? colors.IS_ENABLED_TRUE_COLOR
+                                            : colors.IS_ENABLED_FALSE_COLOR
+                                    }
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitch}
+                                    value={isEnabled}
+                                />
+                            </View>
+                        </View>
+                    </KeyboardAvoidingView>
 
                     {tasks.length === 0 && !isLoading && (
-                        <Text>No task today</Text>
+                        <Text>
+                            {isEnabled ? 'No task completed' : 'No task today'}
+                        </Text>
                     )}
 
-                    {/* TODO: The use of FlatList component from React Native is missing */}
                     <FlatList
                         data={tasks}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id}
                     />
                 </View>
-
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                >
-                    <View style={styles.inputBox}>
-                        <TaskInput
-                            data={tasks}
-                            fetchTodoList={fetchTodoList}
-                            setIsLoading={setIsLoading}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
             </View>
         </>
     )

@@ -2,7 +2,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { Home } from 'components/Home/Home'
+import { Home } from 'screens/Home/Home'
 import { MainPage } from 'screens/MainPage/MainPage'
 import { colors } from 'theme'
 
@@ -16,6 +16,7 @@ export default function App() {
                     name="Home"
                     component={Home}
                     options={{
+                        title: '',
                         headerStyle: {
                             backgroundColor: colors.HEADER_NAV_COLOR,
                         },
@@ -25,7 +26,7 @@ export default function App() {
                 <Stack.Screen
                     name="MainPage"
                     options={{
-                        title: 'Today',
+                        title: 'Tasks',
                         headerStyle: {
                             backgroundColor: colors.HEADER_NAV_COLOR,
                             borderWidth: 0,

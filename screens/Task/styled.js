@@ -74,3 +74,38 @@ export const DeleteButton = styled.TouchableOpacity({
     alignItems: 'center',
     justifyContent: 'center',
 })
+
+export const ModalInput = styled.TextInput({
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: colors.BORDER_COLOR,
+    backgroundColor: colors.BACKGROUND_INPUT_COLOR,
+    height: 45,
+    width: 240,
+    borderRadius: 10,
+    paddingLeft: 7,
+})
+
+export const ModalInputContainer = styled.View({
+    width: 250,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+})
+
+export const ModalInputCounter = styled.Text({
+    fontSize: 12,
+    marginRight: 15,
+    marginBottom: 2,
+})
+
+export const EditButton = styled.TouchableOpacity({
+    marginTop: 15,
+    width: 60,
+    height: 30,
+    borderWidth: 1,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+})
