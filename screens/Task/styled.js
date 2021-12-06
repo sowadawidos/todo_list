@@ -8,6 +8,7 @@ export const DoneButton = styled.TouchableOpacity({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: colors.SECOND_BORDER_COLOR,
+    backgroundColor: colors.BUTTON_DONE_COLOR,
     textAlign: 'center',
     borderRadius: 25,
     display: 'flex',

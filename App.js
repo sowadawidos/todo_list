@@ -26,7 +26,7 @@ export default function App() {
                 <Stack.Screen
                     name="MainPage"
                     options={{
-                        title: 'Tasks',
+                        title: '',
                         headerStyle: {
                             backgroundColor: colors.HEADER_NAV_COLOR,
                             borderWidth: 0,
