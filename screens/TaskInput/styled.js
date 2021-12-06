@@ -20,7 +20,7 @@ export const InputBox = styled.View({
 export const Input = styled.TextInput({
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: colors.BORDER_COLOR,
+    borderColor: colors.BUTTON_COLOR,
     backgroundColor: colors.BACKGROUND_INPUT_COLOR,
     height: 45,
     width: 300,
@@ -33,7 +33,7 @@ export const InputButton = styled.TouchableOpacity({
     height: 40,
     borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: colors.BORDER_COLOR,
+    borderColor: colors.BUTTON_COLOR,
     backgroundColor: colors.BACKGROUND_INPUT_COLOR,
     textAlign: 'center',
     borderRadius: 25,
