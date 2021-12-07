@@ -17,7 +17,7 @@ import { styles } from 'styles'
 import { colors } from 'theme'
 import { fetchData } from 'api'
 import { ModalBox } from 'components/ModalBox/ModalBox'
-import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
+import { LoadingIndicator } from 'components/LoadingIndicator/LoadingIndicator'
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])

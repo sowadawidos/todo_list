@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Modal } from 'react-native'
-import { styles } from '../../styles'
+import { styles } from 'styles'
 
 export const ModalBox = ({ isLoading, modalOutput }) => {
     return (

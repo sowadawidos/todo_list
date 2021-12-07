@@ -8,7 +8,8 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "format": "prettier --check ."
+        "format": "prettier --check .",
+        "flow": "flow"
     },
     "dependencies": {
         "@emotion/native": "^11.0.0",
@@ -38,7 +39,9 @@
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
-        "@babel/core": "^7.12.9",
+        "@babel/cli": "^7.16.0",
+        "@babel/core": "^7.16.0",
+        "@babel/preset-flow": "^7.16.0",
         "@typescript-eslint/eslint-plugin": "^5.5.0",
         "@typescript-eslint/parser": "^5.5.0",
         "babel-eslint": "^10.1.0",
@@ -51,6 +54,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-react": "^7.27.1",
         "eslint-plugin-react-hooks": "^4.3.0",
+        "flow-bin": "^0.166.1",
         "prettier": "^2.5.0"
     },
     "private": true
