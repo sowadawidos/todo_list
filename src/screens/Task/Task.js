@@ -7,19 +7,18 @@ import {
     DoneButton,
     DoneButtonText,
     DoneButtonTrue,
-    TaskBox,
     TaskBoxDone,
     ModalInput,
     ModalInputCounter,
     ModalInputContainer,
 } from './styled'
 
-import { fetchData } from 'api'
-import { styles } from 'styles'
+import { fetchData } from 'src/api'
+import { styles } from 'src/styles'
 
 import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
-import { colors } from 'theme'
-import { BottomSheets } from 'components/BottomSheets/BottomSheets'
+import { colors } from 'src/theme'
+import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)

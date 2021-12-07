@@ -11,8 +11,8 @@ import {
     InputCounter,
 } from './styled'
 
-import { colors } from 'theme'
-import { fetchData } from 'api'
+import { colors } from 'src/theme'
+import { fetchData } from 'src/api'
 
 export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
     const [input, setInput] = useState('')

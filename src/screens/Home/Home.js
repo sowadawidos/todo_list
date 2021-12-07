@@ -2,10 +2,10 @@ import React from 'react'
 
 import { View, StatusBar } from 'react-native'
 
-import { HeaderText } from 'components/HeaderText/HeaderText'
-import { MainButtons } from 'components/MainButtons/MainButtons'
+import { HeaderText } from 'src/components/HeaderText/HeaderText'
+import { MainButtons } from 'src/components/MainButtons/MainButtons'
 
-import { styles } from 'styles'
+import { styles } from 'src/styles'
 
 export const Home = ({ navigation }) => {
     return (

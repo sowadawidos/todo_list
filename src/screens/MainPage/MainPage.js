@@ -10,14 +10,14 @@ import {
     Switch,
 } from 'react-native'
 
-import { Task } from 'screens/Task/Task'
-import { TaskInput } from 'screens/TaskInput/TaskInput'
+import { Task } from 'src/screens/Task/Task'
+import { TaskInput } from 'src/screens/TaskInput/TaskInput'
 
-import { styles } from 'styles'
-import { colors } from 'theme'
-import { fetchData } from 'api'
-import { ModalBox } from 'components/ModalBox/ModalBox'
-import { LoadingIndicator } from 'components/LoadingIndicator/LoadingIndicator'
+import { styles } from 'src/styles'
+import { colors } from 'src/theme'
+import { fetchData } from 'src/api'
+import { ModalBox } from 'src/components/ModalBox/ModalBox'
+import { LoadingIndicator } from 'src/components/LoadingIndicator/LoadingIndicator'
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
