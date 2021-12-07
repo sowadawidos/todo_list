@@ -3,6 +3,7 @@ import { View, Modal } from 'react-native'
 import { styles } from 'src/styles'
 
 export const ModalBox = ({ isLoading, modalOutput }) => {
+    console.log(isLoading)
     return (
         <>
             <Modal animationType="slide" transparent={true} visible={isLoading}>
