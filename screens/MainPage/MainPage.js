@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
-    ActivityIndicator,
     Alert,
     KeyboardAvoidingView,
     Platform,
@@ -18,12 +17,15 @@ import { styles } from 'styles'
 import { colors } from 'theme'
 import { fetchData } from 'api'
 import { ModalBox } from 'components/ModalBox/ModalBox'
+import { LoadingIndicator } from '../../components/LoadingIndicator/LoadingIndicator'
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    //state for showing text when fetching is taking too long
-    const [text, setText] = useState('Loading data')
+
+    const [intervalId, setIntervalId] = useState(null)
+    const [loadingMsg, setLoadingMsg] = useState('')
+
     const [isEnabled, setIsEnabled] = useState(false)
 
     const toggleSwitch = () => {
@@ -37,6 +39,21 @@ export const MainPage = () => {
         setTasks(filteredTask)
     }
 
+    const setLoadingMessage = () => {
+        const text = [
+            'Loading data',
+            'Its taking too long',
+            'Check your internet connection',
+        ]
+        const intervalValue = 3000
+
+        const intervalIdVal = setInterval(() => {
+            setLoadingMsg(text[Math.floor(Math.random() * text.length)])
+        }, intervalValue)
+
+        setIntervalId(intervalIdVal)
+    }
+
     const renderItem = ({ item }) => (
         <Task
             index={item.id}
@@ -46,19 +63,18 @@ export const MainPage = () => {
         />
     )
 
-    const loadingModal = () => (
-        <>
-            <ActivityIndicator
-                style={styles.loader}
-                size="large"
-                animating={isLoading}
-                color={colors.PLACEHOLDER_COLOR}
-            />
-            <Text>{text}</Text>
-        </>
+    const _loadingModal = () => (
+        <LoadingIndicator
+            message={loadingMsg}
+            loading={isLoading}
+            style={styles.loader}
+            color={colors.PLACEHOLDER_COLOR}
+            size={'large'}
+        />
     )
 
     const fetchTodoList = async () => {
+        setLoadingMessage()
         try {
             const response = await fetchData('get')
 
@@ -82,10 +98,14 @@ export const MainPage = () => {
         fetchTodoList()
     }, [])
 
+    useEffect(() => {
+        clearInterval(intervalId)
+    }, [isLoading])
+
     return (
         <>
             <View style={styles.mainPageBox}>
-                <ModalBox modalOutput={loadingModal} isLoading={isLoading} />
+                <ModalBox modalOutput={_loadingModal} isLoading={isLoading} />
                 <View style={styles.taskBox}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

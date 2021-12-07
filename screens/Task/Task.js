@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-    View,
-    Text,
-    Alert,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-} from 'react-native'
+import { View, Text, Alert, Keyboard } from 'react-native'
 
 import {
     DeleteButton,
@@ -39,10 +32,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     }
     const focusStyle = {
         borderColor: 'grey',
-        borderWidth: 1
+        borderWidth: 1,
     }
     const customStyle = () => {
-        if (input.length === 30) return maxInputStyle
+        if (input.length >= 30) return maxInputStyle
         if (focus) return focusStyle
     }
 
@@ -54,7 +47,6 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
             task: task.task,
             done: 'true',
         }
-        console.log(body)
 
         try {
             const response = await fetchData('put', body, `/${index}`)
@@ -169,8 +161,6 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         }
     }
 
-    //TODO: Refactor this part, a lot of code is duplicated, try to find a better way of implementation
-    //I will refactor it tomorrow (I can't bring myself to do it :D)
     if (task.done)
         return (
             <>

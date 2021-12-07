@@ -12,5 +12,6 @@ export const colors = {
     SWITCH_TRUE_COLOR: '#bfeeb8',
     IS_ENABLED_TRUE_COLOR: '#52e349',
     IS_ENABLED_FALSE_COLOR: '#f4f3f4',
-    BUTTON_DONE_COLOR: "#ffffff"
+    BUTTON_DONE_COLOR: '#ffffff',
+    SWITCH_IOS_BACKGROUND_COLOR: '#3e3e3e',
 }

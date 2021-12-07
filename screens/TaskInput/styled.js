@@ -39,7 +39,7 @@ export const InputButton = styled.TouchableOpacity({
     borderRadius: 25,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
 })
 
 export const InputButtonText = styled.Text({

@@ -24,10 +24,10 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
     }
     const focusStyle = {
         borderColor: 'grey',
-        borderWidth: 1
+        borderWidth: 1,
     }
     const customStyle = () => {
-        if (input.length === 30) return maxInputStyle
+        if (input.length >= 30) return maxInputStyle
         if (focus) return focusStyle
     }
 
