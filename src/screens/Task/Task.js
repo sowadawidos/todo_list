@@ -1,36 +1,42 @@
 import React, { useState } from 'react'
 
-import {
-    View,
-    Text,
-    Alert,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-} from 'react-native'
+import { View, Text, Alert, Keyboard } from 'react-native'
 
 import {
     DeleteButton,
     DoneButton,
     DoneButtonText,
     DoneButtonTrue,
-    TaskBox,
     TaskBoxDone,
     ModalInput,
     ModalInputCounter,
     ModalInputContainer,
 } from './styled'
 
-import { fetchData } from 'api'
-import { styles } from 'styles'
+import { fetchData } from 'src/api'
+import { styles } from 'src/styles'
 
 import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
-import { colors } from 'theme'
-import { BottomSheets } from 'components/BottomSheets/BottomSheets'
+import { colors } from 'src/theme'
+import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
     const [input, setInput] = useState(task.task)
+    const [focus, setFocus] = useState(false)
+
+    const maxInputStyle = {
+        borderColor: 'red',
+        borderWidth: 1,
+    }
+    const focusStyle = {
+        borderColor: 'grey',
+        borderWidth: 1,
+    }
+    const customStyle = () => {
+        if (input.length >= 30) return maxInputStyle
+        if (focus) return focusStyle
+    }
 
     const handleTaskChange = async () => {
         setIsLoading(true)
@@ -40,7 +46,6 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
             task: task.task,
             done: 'true',
         }
-        console.log(body)
 
         try {
             const response = await fetchData('put', body, `/${index}`)
@@ -56,8 +61,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     }
 
     const handleEditTask = async () => {
-        await setIsShowingBottomSheets(false)
-        setIsLoading(true)
+        setIsShowingBottomSheets(false)
+        setTimeout(() => {
+            setIsLoading(true)
+        }, 500)
 
         if (!input.length) {
             setIsShowingBottomSheets(true)
@@ -109,12 +116,9 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                         onChangeText={(text) => setInput(text)}
                         defaultValue={input}
                         maxLength={30}
-                        style={
-                            input.length === 30 && {
-                                borderColor: 'red',
-                                borderWidth: 1,
-                            }
-                        }
+                        style={customStyle()}
+                        onFocus={() => setFocus(true)}
+                        onBlur={() => setFocus(false)}
                     />
                 </View>
                 <View style={styles.bottomSheetButtonsView}>
@@ -139,7 +143,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
     const handleDeleteTask = async () => {
         setIsShowingBottomSheets(false)
-        setIsLoading(true)
+        setTimeout(() => {
+            setIsLoading(true)
+        }, 500)
+
         try {
             const response = await fetchData('delete', null, `/${index}`)
 
@@ -153,8 +160,6 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         }
     }
 
-    //TODO: Refactor this part, a lot of code is duplicated, try to find a better way of implementation
-    //I will refactor it tomorrow (I can't bring myself to do it :D)
     if (task.done)
         return (
             <>

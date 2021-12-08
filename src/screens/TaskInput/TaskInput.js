@@ -11,11 +11,25 @@ import {
     InputCounter,
 } from './styled'
 
-import { colors } from 'theme'
-import { fetchData } from 'api'
+import { colors } from 'src/theme'
+import { fetchData } from 'src/api'
 
 export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
     const [input, setInput] = useState('')
+    const [focus, setFocus] = useState(false)
+
+    const maxInputStyle = {
+        borderColor: 'red',
+        borderWidth: 1,
+    }
+    const focusStyle = {
+        borderColor: 'grey',
+        borderWidth: 1,
+    }
+    const customStyle = () => {
+        if (input.length >= 30) return maxInputStyle
+        if (focus) return focusStyle
+    }
 
     const handleClick = async () => {
         setIsLoading(true)
@@ -64,14 +78,11 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
                     onChangeText={(text) => setInput(text)}
                     defaultValue={input}
                     maxLength={30}
-                    style={
-                        input.length === 30 && {
-                            borderColor: 'red',
-                            borderWidth: 1,
-                        }
-                    }
+                    style={customStyle()}
+                    onFocus={() => setFocus(true)}
+                    onBlur={() => setFocus(false)}
                 />
-                <InputButton onPress={handleClick}>
+                <InputButton onPress={handleClick} type="submit">
                     <InputButtonText>+</InputButtonText>
                 </InputButton>
             </InputBox>
