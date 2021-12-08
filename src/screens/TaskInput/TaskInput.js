@@ -26,7 +26,7 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
         borderColor: 'grey',
         borderWidth: 1,
     }
-    const customStyle = () => {
+    const getInputStyle = () => {
         if (input.length >= 30) return maxInputStyle
         if (focus) return focusStyle
     }
@@ -78,7 +78,7 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
                     onChangeText={(text) => setInput(text)}
                     defaultValue={input}
                     maxLength={30}
-                    style={customStyle()}
+                    style={getInputStyle()}
                     onFocus={() => setFocus(true)}
                     onBlur={() => setFocus(false)}
                 />

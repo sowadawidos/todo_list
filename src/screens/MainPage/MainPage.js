@@ -45,6 +45,7 @@ export const MainPage = () => {
             'Its taking too long',
             'Check your internet connection',
         ]
+        setLoadingMsg(text[0])
         const intervalValue = 3000
 
         const intervalIdVal = setInterval(() => {
@@ -63,7 +64,7 @@ export const MainPage = () => {
         />
     )
 
-    const _loadingModal = () => (
+    const loadingModal = () => (
         <LoadingIndicator
             message={loadingMsg}
             loading={isLoading}
@@ -105,7 +106,7 @@ export const MainPage = () => {
     return (
         <>
             <View style={styles.mainPageBox}>
-                <ModalBox modalOutput={_loadingModal} isLoading={isLoading} />
+                <ModalBox modalOutput={loadingModal} isLoading={isLoading} />
                 <View style={styles.taskBox}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
