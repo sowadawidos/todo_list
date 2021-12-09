@@ -31,6 +31,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [input, setInput] = useState(task.task)
     const [focus, setFocus] = useState(false)
 
+    const isDone = task.done === 'true' || task.done === 'TRUE';
     // const scale = useSharedValue(1)
     //
     // const reanimatedStyle = useAnimatedStyle(() => {
@@ -185,7 +186,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                     <Text style={styles.taskText}>{task.task}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    {task.done === 'true' || task.done === 'TRUE' ? (
+                    {isDone ? (
                         <DoneButtonTrue disabled>
                             <DoneButtonText>
                                 <AntDesign
