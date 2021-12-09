@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { View, Text, Alert, Keyboard } from 'react-native'
 
@@ -20,10 +20,29 @@ import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
 import { colors } from 'src/theme'
 import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withSpring
+} from 'react-native-reanimated'
+
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
     const [input, setInput] = useState(task.task)
     const [focus, setFocus] = useState(false)
+
+    const isDone = task.done === 'true' || task.done === 'TRUE';
+    // const scale = useSharedValue(1)
+    //
+    // const reanimatedStyle = useAnimatedStyle(() => {
+    //     return {
+    //         transform: [{ scale: scale.value }],
+    //     }
+    // }, [])
+    //
+    // useEffect(() => {
+    //     scale.value = withSpring(2);
+    // }, [])
 
     const maxInputStyle = {
         borderColor: 'red',
@@ -33,7 +52,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         borderColor: 'grey',
         borderWidth: 1,
     }
-    const customStyle = () => {
+    const getInputStyle = () => {
         if (input.length >= 30) return maxInputStyle
         if (focus) return focusStyle
     }
@@ -96,7 +115,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         setIsShowingBottomSheets(!isShowingBottomSheets)
     }
 
-    const loadingModal = () => (
+    const _loadingModal = () => (
         <>
             <View
                 style={{
@@ -116,7 +135,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                         onChangeText={(text) => setInput(text)}
                         defaultValue={input}
                         maxLength={30}
-                        style={customStyle()}
+                        style={getInputStyle()}
                         onFocus={() => setFocus(true)}
                         onBlur={() => setFocus(false)}
                     />
@@ -160,46 +179,41 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         }
     }
 
-    if (task.done)
-        return (
-            <>
-                <TaskBoxDone>
-                    <View style={styles.taskTextBox}>
-                        <Text style={styles.taskText}>{task.task}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        {task.done === 'true' || task.done === 'TRUE' ? (
-                            <DoneButtonTrue disabled>
-                                <DoneButtonText>
-                                    <AntDesign
-                                        name="check"
-                                        size={20}
-                                        color="black"
-                                    />
-                                </DoneButtonText>
-                            </DoneButtonTrue>
-                        ) : (
-                            <DoneButton onPress={handleTaskChange} />
-                        )}
-                        <DoneButton
-                            style={{ marginLeft: 10 }}
-                            onPress={toggleBottomNavigationView}
-                        >
-                            <Feather
-                                name="more-vertical"
-                                size={18}
-                                color="black"
-                            />
-                        </DoneButton>
-                    </View>
-                </TaskBoxDone>
+    return (
+        <>
+            <TaskBoxDone>
+                <View style={styles.taskTextBox}>
+                    <Text style={styles.taskText}>{task.task}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    {isDone ? (
+                        <DoneButtonTrue disabled>
+                            <DoneButtonText>
+                                <AntDesign
+                                    name="check"
+                                    size={20}
+                                    color="black"
+                                />
+                            </DoneButtonText>
+                        </DoneButtonTrue>
+                    ) : (
+                        <DoneButton onPress={handleTaskChange} />
+                    )}
+                    <DoneButton
+                        style={{ marginLeft: 10 }}
+                        onPress={toggleBottomNavigationView}
+                    >
+                        <Feather name="more-vertical" size={18} color="black" />
+                    </DoneButton>
+                </View>
+            </TaskBoxDone>
 
-                <BottomSheets
-                    text={'Edit task'}
-                    isShowingBottomSheets={isShowingBottomSheets}
-                    toggleBottomNavigationView={toggleBottomNavigationView}
-                    loadingModal={loadingModal}
-                />
-            </>
-        )
+            <BottomSheets
+                text={'Edit task'}
+                isShowingBottomSheets={isShowingBottomSheets}
+                toggleBottomNavigationView={toggleBottomNavigationView}
+                loadingModal={_loadingModal}
+            />
+        </>
+    )
 }
