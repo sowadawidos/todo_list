@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { View, Text, Alert, Keyboard } from 'react-native'
 
@@ -20,29 +20,12 @@ import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
 import { colors } from 'src/theme'
 import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
-import Animated, {
-    useSharedValue,
-    useAnimatedStyle,
-    withSpring
-} from 'react-native-reanimated'
-
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
     const [input, setInput] = useState(task.task)
     const [focus, setFocus] = useState(false)
 
     const isDone = task.done === 'true' || task.done === 'TRUE';
-    // const scale = useSharedValue(1)
-    //
-    // const reanimatedStyle = useAnimatedStyle(() => {
-    //     return {
-    //         transform: [{ scale: scale.value }],
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     scale.value = withSpring(2);
-    // }, [])
 
     const maxInputStyle = {
         borderColor: 'red',
