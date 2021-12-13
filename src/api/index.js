@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-import { API_URL } from '@env'
+import { API_URLL } from '@env'
 
 export const fetchData = (method, body = null, path = '') => {
-    console.log(API_URL)
+    console.log(API_URLL)
     return axios({
         method,
-        url: `${API_URL}${path}`,
+        url: `${API_URLL}${path}`,
         data: body ? { ...body } : undefined,
     })
 }
