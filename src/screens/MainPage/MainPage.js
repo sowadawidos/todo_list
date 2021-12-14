@@ -8,7 +8,7 @@ import {
     Platform,
     FlatList,
     Switch,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native'
 
 import { Task } from 'src/screens/Task/Task'
@@ -24,9 +24,11 @@ export const MainPage = () => {
     const [tasks, setTasks] = useState([])
     const [filteredTask, setFilteredTask] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isFetchError, setIsFetchError] = useState(false)
 
     const [intervalId, setIntervalId] = useState(null)
     const [loadingMsg, setLoadingMsg] = useState('')
+
     const [isEnabled, setIsEnabled] = useState(false)
     const [isFetchError, setIsFetchError] = useState(false)
 
@@ -35,6 +37,7 @@ export const MainPage = () => {
         setIsEnabled(prev => !prev)
         setFilteredTask(filteredTask)
     }
+
 
     const text = ['Loading data', 'Wait a moment', 'Give us a moment']
 
@@ -45,7 +48,6 @@ export const MainPage = () => {
             setLoadingMsg(loadingTxt[0])
 
             const randomTextValue = loadingTxt[Math.floor(Math.random() * loadingTxt.length)]
-
             setLoadingMsg(randomTextValue)
         }, intervalValue)
 
@@ -64,7 +66,6 @@ export const MainPage = () => {
     const loadingModal = () => (
         <LoadingIndicator
             message={loadingMsg}
-            loading={isLoading}
             style={styles.loader}
             color={colors.PLACEHOLDER_COLOR}
             size={'large'}
@@ -110,7 +111,39 @@ export const MainPage = () => {
         if (!isFetchError) return
 
         clearInterval(intervalId)
-    }, [isLoading])
+    }, [isFetchError])
+
+    const ErrorFetchModal = () => {
+        return (
+            <View
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    backgroundColor: 'red',
+                    padding: 12,
+                    zIndex: 2,
+                    width: '100%',
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 18,
+                        fontWeight: '600',
+                        paddingBottom: 6,
+                    }}
+                >
+                    There was an error
+                </Text>
+
+                <TouchableOpacity onPress={fetchTodoList}>
+                    <Text>Try Again</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    if (isLoading) return loadingModal()
 
     const ErrorFetchModal = () => {
         return (
