@@ -1,16 +1,31 @@
 import React from 'react'
-import { Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 
-export const LoadingIndicator = ({ loading, message, color, style, size }) => {
+export const LoadingIndicator = ({
+    message = 'Loading',
+    color = 'white',
+    style = {},
+    size = 'large',
+}) => {
     return (
-        <>
+        <View
+            style={{
+                position: 'fixed',
+                top: '40%',
+                padding: 36,
+                backgroundColor: 'gray',
+                zIndex: 3,
+            }}
+        >
             <ActivityIndicator
                 style={style}
                 size={size}
-                animating={loading}
+                animating={true}
                 color={color}
             />
-            <Text>{message}</Text>
-        </>
+            <Text style={{ color: 'white', textAlign: 'center' }}>
+                {message}
+            </Text>
+        </View>
     )
 }

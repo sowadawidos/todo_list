@@ -8,6 +8,7 @@ import {
     Platform,
     FlatList,
     Switch,
+    TouchableOpacity,
 } from 'react-native'
 
 import { Task } from 'src/screens/Task/Task'
@@ -22,9 +23,11 @@ import { LoadingIndicator } from 'src/components/LoadingIndicator/LoadingIndicat
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isFetchError, setIsFetchError] = useState(false)
 
     const [intervalId, setIntervalId] = useState(null)
     const [loadingMsg, setLoadingMsg] = useState('')
+    console.log('MainPage.js (28) - loadingMsg', loadingMsg)
 
     const [isEnabled, setIsEnabled] = useState(false)
 
@@ -40,16 +43,15 @@ export const MainPage = () => {
     }
 
     const setLoadingMessage = () => {
-        const text = [
-            'Loading data',
-            'Its taking too long',
-            'Check your internet connection',
-        ]
-        setLoadingMsg(text[0])
-        const intervalValue = 3000
+        const text = ['Loading data', 'Wait a moment', 'Give us a moment']
+
+        const intervalValue = 500
 
         const intervalIdVal = setInterval(() => {
-            setLoadingMsg(text[Math.floor(Math.random() * text.length)])
+            const randomTextValue =
+                text[Math.floor(Math.random() * text.length)]
+
+            setLoadingMsg(randomTextValue)
         }, intervalValue)
 
         setIntervalId(intervalIdVal)
@@ -67,7 +69,6 @@ export const MainPage = () => {
     const loadingModal = () => (
         <LoadingIndicator
             message={loadingMsg}
-            loading={isLoading}
             style={styles.loader}
             color={colors.PLACEHOLDER_COLOR}
             size={'large'}
@@ -75,38 +76,77 @@ export const MainPage = () => {
     )
 
     const fetchTodoList = async () => {
+        if (isFetchError) setIsFetchError(false)
         setLoadingMessage()
+        setIsLoading(true)
+
         try {
             const response = await fetchData('get')
 
             if (!response.data) throw Error
 
-            setTasks(response.data.reverse())
-            setIsLoading(false)
-        } catch {
-            Alert.alert('Something went wrong. Try again.', '', [
-                {
-                    text: 'Reload',
-                    onPress: () => fetchTodoList(),
-                    style: 'cancel',
-                },
-                { text: 'Cancel', onPress: () => setIsLoading(false) },
-            ])
+            //This is to give more suspense to show the loading spinner a bit more
+            setTimeout(() => {
+                setTasks(response.data.reverse())
+                setIsLoading(false)
+            }, 3000)
+        } catch (e) {
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
     useEffect(() => {
         fetchTodoList()
+
+        return () => clearInterval(intervalId)
     }, [])
 
     useEffect(() => {
+        if (!isFetchError) return
+
         clearInterval(intervalId)
-    }, [isLoading])
+    }, [isFetchError])
+
+    const ErrorFetchModal = () => {
+        return (
+            <View
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    backgroundColor: 'red',
+                    padding: 12,
+                    zIndex: 2,
+                    width: '100%',
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 18,
+                        fontWeight: '600',
+                        paddingBottom: 6,
+                    }}
+                >
+                    There was an error
+                </Text>
+
+                <TouchableOpacity onPress={fetchTodoList}>
+                    <Text>Try Again</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    if (isLoading) return loadingModal()
 
     return (
         <>
             <View style={styles.mainPageBox}>
-                <ModalBox modalOutput={loadingModal} isLoading={isLoading} />
+                {isFetchError && ErrorFetchModal()}
+
                 <View style={styles.taskBox}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
