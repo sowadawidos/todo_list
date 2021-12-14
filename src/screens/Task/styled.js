@@ -16,6 +16,19 @@ export const DoneButton = styled.TouchableOpacity({
     justifyContent: 'center',
 })
 
+export const SaveButton = styled.TouchableOpacity({
+    width: 80,
+    paddingLeft: 22,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 5,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: colors.BUTTON_COLOR,
+    textAlign: 'center',
+    borderRadius: 10
+})
+
 export const DoneButtonTrue = styled.TouchableOpacity({
     width: 30,
     height: 30,

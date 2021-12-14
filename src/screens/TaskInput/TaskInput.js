@@ -14,7 +14,7 @@ import {
 import { colors } from 'src/theme'
 import { fetchData } from 'src/api'
 
-export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
+export const TaskInput = ({fetchTodoList, setIsLoading }) => {
     const [input, setInput] = useState('')
     const [focus, setFocus] = useState(false)
 
@@ -42,7 +42,7 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
         Keyboard.dismiss()
 
         const taskToPost = {
-            id: data.length.toString(),
+            id: Date.now(),
             task: input,
             //QUESTION: Why false is string and not a boolean value?
             done: 'false',
@@ -55,13 +55,18 @@ export const TaskInput = ({ data, fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList()
+            fetchTodoList(['Adding new task'])
 
             setInput('')
         } catch {
-            Alert.alert(
-                'Something went wrong with adding your task. Try again.'
-            )
+            Alert.alert('Something went wrong. Try again.', '', [
+                {
+                    text: 'Reload',
+                    onPress: () => fetchTodoList(),
+                    style: 'cancel',
+                },
+                { text: 'Cancel', onPress: () => setIsLoading(false) },
+            ])
         }
     }
 

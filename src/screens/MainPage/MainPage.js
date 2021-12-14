@@ -8,6 +8,7 @@ import {
     Platform,
     FlatList,
     Switch,
+    TouchableOpacity
 } from 'react-native'
 
 import { Task } from 'src/screens/Task/Task'
@@ -21,35 +22,31 @@ import { LoadingIndicator } from 'src/components/LoadingIndicator/LoadingIndicat
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
+    const [filteredTask, setFilteredTask] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
     const [intervalId, setIntervalId] = useState(null)
     const [loadingMsg, setLoadingMsg] = useState('')
-
     const [isEnabled, setIsEnabled] = useState(false)
+    const [isFetchError, setIsFetchError] = useState(false)
 
     const toggleSwitch = () => {
-        if (isEnabled) {
-            setIsLoading(true)
-            setIsEnabled((previousState) => !previousState)
-            return fetchTodoList()
-        }
-        const filteredTask = tasks.filter((task) => task.done === 'TRUE')
-        setIsEnabled((previousState) => !previousState)
-        setTasks(filteredTask)
+        const filteredTask = tasks.filter(task => task.done === "TRUE")
+        setIsEnabled(prev => !prev)
+        setFilteredTask(filteredTask)
     }
 
-    const setLoadingMessage = () => {
-        const text = [
-            'Loading data',
-            'Its taking too long',
-            'Check your internet connection',
-        ]
-        setLoadingMsg(text[0])
-        const intervalValue = 3000
+    const text = ['Loading data', 'Wait a moment', 'Give us a moment']
+
+    const setLoadingMessage = (loadingTxt = text) => {
+        const intervalValue = 1500
 
         const intervalIdVal = setInterval(() => {
-            setLoadingMsg(text[Math.floor(Math.random() * text.length)])
+            setLoadingMsg(loadingTxt[0])
+
+            const randomTextValue = loadingTxt[Math.floor(Math.random() * loadingTxt.length)]
+
+            setLoadingMsg(randomTextValue)
         }, intervalValue)
 
         setIntervalId(intervalIdVal)
@@ -57,7 +54,7 @@ export const MainPage = () => {
 
     const renderItem = ({ item }) => (
         <Task
-            index={item.id}
+            index={tasks.indexOf(item)}
             task={item}
             fetchTodoList={fetchTodoList}
             setIsLoading={setIsLoading}
@@ -74,15 +71,19 @@ export const MainPage = () => {
         />
     )
 
-    const fetchTodoList = async () => {
-        setLoadingMessage()
+    const fetchTodoList = async (loadingMessage) => {
+        if (isFetchError) setIsFetchError(false)
+        await setLoadingMessage(loadingMessage)
+        setIsLoading(true)
         try {
             const response = await fetchData('get')
 
             if (!response.data) throw Error
 
-            setTasks(response.data.reverse())
-            setIsLoading(false)
+            setTimeout(() => {
+                setTasks(response.data)
+                setIsLoading(false)
+            }, 3000)
         } catch {
             Alert.alert('Something went wrong. Try again.', '', [
                 {
@@ -92,28 +93,68 @@ export const MainPage = () => {
                 },
                 { text: 'Cancel', onPress: () => setIsLoading(false) },
             ])
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
     useEffect(() => {
         fetchTodoList()
+
+        return () => clearInterval(intervalId)
     }, [])
 
     useEffect(() => {
+        if (!isFetchError) return
+
         clearInterval(intervalId)
     }, [isLoading])
+
+    const ErrorFetchModal = () => {
+        return (
+            <View
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    backgroundColor: 'red',
+                    padding: 12,
+                    zIndex: 2,
+                    width: '100%',
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 18,
+                        fontWeight: '600',
+                        paddingBottom: 6,
+                    }}
+                >
+                    There was an error
+                </Text>
+
+                <TouchableOpacity onPress={fetchTodoList}>
+                    <Text>Try Again</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
 
     return (
         <>
             <View style={styles.mainPageBox}>
                 <ModalBox modalOutput={loadingModal} isLoading={isLoading} />
+                {isFetchError && ErrorFetchModal()}
                 <View style={styles.taskBox}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     >
                         <View style={styles.inputBox}>
                             <TaskInput
-                                data={tasks}
+                                data={isEnabled > 0 ? filteredTask.reverse() : tasks.reverse()}
                                 fetchTodoList={fetchTodoList}
                                 setIsLoading={setIsLoading}
                             />
@@ -148,7 +189,7 @@ export const MainPage = () => {
                     )}
 
                     <FlatList
-                        data={tasks}
+                        data={isEnabled ? filteredTask.reverse() : tasks.reverse()}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id}
                     />
