@@ -78,11 +78,11 @@ export const styles = StyleSheet.create({
         width: '100%',
         height: 250,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     bottomSheetHeaderText: {
         fontSize: 18,
-        fontWeight: '600'
+        fontWeight: '600',
     },
     bottomSheetButtonsView: {
         display: 'flex',
@@ -91,5 +91,19 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 45,
         paddingTop: 30,
+    },
+    errorFetchModalView: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        backgroundColor: 'red',
+        padding: 12,
+        zIndex: 2,
+        width: '100%',
+    },
+    errorFetchModalText: {
+        fontSize: 18,
+        fontWeight: '600',
+        paddingBottom: 6,
     },
 })

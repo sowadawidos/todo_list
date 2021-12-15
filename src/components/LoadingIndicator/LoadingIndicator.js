@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
+import { MessageText } from "./styled";
 
 export const LoadingIndicator = ({
-    loading,
-    message,
-    color,
-    style,
-    size
+    message = "Loading",
+    color = "white",
+    style = {},
+    size = 'large'
 }) => {
     return (
         <View
@@ -24,9 +24,9 @@ export const LoadingIndicator = ({
                 animating={true}
                 color={color}
             />
-            <Text style={{ color: 'black', textAlign: 'center' }}>
+            <MessageText>
                 {message}
-            </Text>
-        </>
+            </MessageText>
+        </View>
     )
 }

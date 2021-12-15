@@ -44,7 +44,6 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
         const taskToPost = {
             id: Date.now(),
             task: input,
-            //QUESTION: Why false is string and not a boolean value?
             done: 'false',
         }
 

@@ -21,7 +21,7 @@ import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
 import { colors } from 'src/theme'
 import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
-export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
+export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
     const [input, setInput] = useState('')
     const [focus, setFocus] = useState(false)
@@ -59,14 +59,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             fetchTodoList(['Changing data'])
         } catch {
-            Alert.alert('Something went wrong. Try again.', '', [
-                {
-                    text: 'Reload',
-                    onPress: () => fetchTodoList(),
-                    style: 'cancel',
-                },
-                { text: 'Cancel', onPress: () => setIsLoading(false) },
-            ])
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
@@ -98,14 +94,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             fetchTodoList(['Editing data'])
         } catch {
-            Alert.alert('Something went wrong. Try again.', '', [
-                {
-                    text: 'Reload',
-                    onPress: () => fetchTodoList(),
-                    style: 'cancel',
-                },
-                { text: 'Cancel', onPress: () => setIsLoading(false) },
-            ])
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
@@ -176,14 +168,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             fetchTodoList(['Deleting data'])
         } catch {
-            Alert.alert('Something went wrong. Try again.', '', [
-                {
-                    text: 'Reload',
-                    onPress: () => fetchTodoList(),
-                    style: 'cancel',
-                },
-                { text: 'Cancel', onPress: () => setIsLoading(false) },
-            ])
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
