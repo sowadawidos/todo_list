@@ -11,6 +11,7 @@ import {
     ModalInput,
     ModalInputCounter,
     ModalInputContainer,
+    SaveButton,
 } from './styled'
 
 import { fetchData } from 'src/api'
@@ -22,10 +23,10 @@ import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
 export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
-    const [input, setInput] = useState(task.task)
+    const [input, setInput] = useState('')
     const [focus, setFocus] = useState(false)
 
-    const isDone = task.done === 'true' || task.done === 'TRUE';
+    const isDone = task.done === 'true' || task.done === 'TRUE'
 
     const maxInputStyle = {
         borderColor: 'red',
@@ -44,7 +45,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         setIsLoading(true)
 
         const body = {
-            id: index,
+            id: task.id,
             task: task.task,
             done: 'true',
         }
@@ -56,9 +57,16 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList()
+            fetchTodoList(['Changing data'])
         } catch {
-            Alert.alert('There is error updating your task.')
+            Alert.alert('Something went wrong. Try again.', '', [
+                {
+                    text: 'Reload',
+                    onPress: () => fetchTodoList(),
+                    style: 'cancel',
+                },
+                { text: 'Cancel', onPress: () => setIsLoading(false) },
+            ])
         }
     }
 
@@ -76,7 +84,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
         Keyboard.dismiss()
 
         const body = {
-            id: index,
+            id: task.id,
             task: input,
             done: task.done,
         }
@@ -88,13 +96,21 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList()
+            fetchTodoList(['Editing data'])
         } catch {
-            Alert.alert('There is error updating your task')
+            Alert.alert('Something went wrong. Try again.', '', [
+                {
+                    text: 'Reload',
+                    onPress: () => fetchTodoList(),
+                    style: 'cancel',
+                },
+                { text: 'Cancel', onPress: () => setIsLoading(false) },
+            ])
         }
     }
 
     const toggleBottomNavigationView = () => {
+        setInput(task.task)
         setIsShowingBottomSheets(!isShowingBottomSheets)
     }
 
@@ -122,18 +138,20 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
                         onFocus={() => setFocus(true)}
                         onBlur={() => setFocus(false)}
                     />
+                    <View
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <SaveButton onPress={handleEditTask}>
+                            <Text>Save</Text>
+                        </SaveButton>
+                    </View>
                 </View>
                 <View style={styles.bottomSheetButtonsView}>
-                    <DoneButton
-                        style={{ marginLeft: 10 }}
-                        onPress={handleEditTask}
-                    >
-                        <Feather name="edit-2" size={15} color="black" />
-                    </DoneButton>
-                    <DeleteButton
-                        style={{ marginLeft: 10 }}
-                        onPress={handleDeleteTask}
-                    >
+                    <DeleteButton onPress={handleDeleteTask}>
                         <DoneButtonText>
                             <EvilIcons name="trash" size={25} color="black" />
                         </DoneButtonText>
@@ -156,9 +174,16 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList()
+            fetchTodoList(['Deleting data'])
         } catch {
-            Alert.alert('There is error deleting your task.')
+            Alert.alert('Something went wrong. Try again.', '', [
+                {
+                    text: 'Reload',
+                    onPress: () => fetchTodoList(),
+                    style: 'cancel',
+                },
+                { text: 'Cancel', onPress: () => setIsLoading(false) },
+            ])
         }
     }
 

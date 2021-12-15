@@ -2,10 +2,11 @@ import React from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
 
 export const LoadingIndicator = ({
-    message = 'Loading',
-    color = 'white',
-    style = {},
-    size = 'large',
+    loading,
+    message,
+    color,
+    style,
+    size
 }) => {
     return (
         <View
@@ -23,9 +24,9 @@ export const LoadingIndicator = ({
                 animating={true}
                 color={color}
             />
-            <Text style={{ color: 'white', textAlign: 'center' }}>
+            <Text style={{ color: 'black', textAlign: 'center' }}>
                 {message}
             </Text>
-        </View>
+        </>
     )
 }
