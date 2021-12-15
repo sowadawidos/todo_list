@@ -27,7 +27,6 @@ export const MainPage = () => {
 
     const [intervalId, setIntervalId] = useState(null)
     const [loadingMsg, setLoadingMsg] = useState('')
-    console.log('MainPage.js (28) - loadingMsg', loadingMsg)
 
     const [isEnabled, setIsEnabled] = useState(false)
 
@@ -83,7 +82,7 @@ export const MainPage = () => {
         try {
             const response = await fetchData('get')
 
-            if (!response.data) throw Error
+            if (!response.data || response.isFetchError) throw Error
 
             //This is to give more suspense to show the loading spinner a bit more
             setTimeout(() => {
@@ -100,8 +99,6 @@ export const MainPage = () => {
 
     useEffect(() => {
         fetchTodoList()
-
-        return () => clearInterval(intervalId)
     }, [])
 
     useEffect(() => {
