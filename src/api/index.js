@@ -1,15 +1,20 @@
 import axios from 'axios'
 
-import { API_URL } from '@env'
+import { API_URLL } from '@env'
 
-// const API_URLL =
-//     'https://sheet.best/api/sheets/bc8c1f1d-ab0b-4dc0-8730-e22aaae74a59'
+export const fetchData = async (method, body = null, path = '') => {
+    console.log(API_URLL)
 
-export const fetchData = (method, body = null, path = '') => {
-    console.log(API_URL)
-    return axios({
-        method,
-        url: `${API_URL}${path}`,
-        data: body ? { ...body } : undefined,
-    })
+    try {
+        const response = await axios({
+            method,
+            url: `${API_URLL}${path}`,
+            data: body ? { ...body } : undefined,
+        })
+
+        return response
+    } catch (error) {
+        console.log('index.js (23) - error', error)
+        return { isFetchError: true }
+    }
 }

@@ -79,7 +79,7 @@ export const MainPage = () => {
         try {
             const response = await fetchData('get')
 
-            if (!response.data) throw Error
+            if (!response.data || response.isFetchError) throw Error
 
             setTimeout(() => {
                 setTasks(response.data)
@@ -103,8 +103,6 @@ export const MainPage = () => {
 
     useEffect(() => {
         fetchTodoList()
-
-        return () => clearInterval(intervalId)
     }, [])
 
     useEffect(() => {
