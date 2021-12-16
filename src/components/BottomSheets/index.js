@@ -6,12 +6,12 @@ import { BottomSheet } from 'react-native-btr'
 import { BottomSheetHeaderBox, BottomSheetHeaderClose } from './styled'
 import { AntDesign } from '@expo/vector-icons'
 
-export const BottomSheets = ({
+export default function BottomSheets({
     isShowingBottomSheets,
     toggleBottomNavigationView,
-    loadingModal,
     text,
-}) => {
+    children,
+}) {
     return (
         <>
             <BottomSheet
@@ -38,9 +38,7 @@ export const BottomSheets = ({
                                 />
                             </BottomSheetHeaderClose>
                         </BottomSheetHeaderBox>
-
-                        {/* // Why not use React.children? instead of this loadingModal() thing */}
-                        {loadingModal()}
+                        {children}
                     </View>
                 </KeyboardAvoidingView>
             </BottomSheet>

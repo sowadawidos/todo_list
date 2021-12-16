@@ -1,5 +1,5 @@
 import { Platform, StyleSheet } from 'react-native'
-import { colors } from '../theme'
+import { colors } from 'src/theme'
 
 export const styles = StyleSheet.create({
     mainBox: {

@@ -9,16 +9,16 @@ import {
     Switch,
 } from 'react-native'
 
-import { Task } from 'src/screens/Task/Task'
-import { TaskInput } from 'src/screens/TaskInput/TaskInput'
+import Task from 'src/screens/Task'
+import TaskInput from 'src/components/TaskInput'
 
 import { styles } from 'src/styles'
 import { colors } from 'src/theme'
 import { fetchData } from 'src/api'
-import { LoadingIndicator } from 'src/components/LoadingIndicator/LoadingIndicator'
-import { ErrorFetchModal } from 'src/components/ErrorFetchModal/ErrorFetchModal'
+import LoadingIndicator from 'src/components/LoadingIndicator'
+import ErrorFetchModal from 'src/components/ErrorFetchModal'
 
-export const MainPage = () => {
+export default function MainPage() {
     const [tasks, setTasks] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isFetchError, setIsFetchError] = useState(false)
@@ -74,9 +74,6 @@ export const MainPage = () => {
     const renderItem = ({ item }) => {
         return (
             <Task
-                //Hint: https://docs.sheet.best/#retrieving-different-data-formats-on-get
-                //It will be aiming to the wrong to-do on delete and update, use the hint I gave you
-                index={tasks.indexOf(item)}
                 task={item}
                 fetchTodoList={fetchTodoList}
                 setIsLoading={setIsLoading}
@@ -142,9 +139,10 @@ export const MainPage = () => {
                         <View style={styles.inputBox}>
                             {/* TaskInput should not be a screen */}
                             <TaskInput
-                                lastIdTask={Number(tasks?.[0]?.id) ?? 0}
+                                taskCount={tasks.length}
                                 fetchTodoList={fetchTodoList}
                                 setIsLoading={setIsLoading}
+                                setIsFetchError={setIsFetchError}
                             />
 
                             <View style={styles.switchBox}>
