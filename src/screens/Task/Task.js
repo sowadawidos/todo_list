@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-
 import { View, Text, Alert, Keyboard } from 'react-native'
+import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
 
 import {
     DeleteButton,
@@ -14,31 +14,34 @@ import {
     SaveButton,
 } from './styled'
 
-import { fetchData } from 'src/api'
 import { styles } from 'src/styles'
 
-import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons'
 import { colors } from 'src/theme'
+
+import { fetchData } from 'src/api'
+
 import { BottomSheets } from 'src/components/BottomSheets/BottomSheets'
 
-export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError }) => {
+import { maxInputStyle, focusStyle } from './helpers'
+
+export const Task = ({
+    index,
+    task,
+    fetchTodoList,
+    setIsLoading,
+    setIsFetchError,
+}) => {
     const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
-    const [input, setInput] = useState('')
-    const [focus, setFocus] = useState(false)
+    const [inputText, setInputText] = useState('')
+    const [isFocused, setIsFocused] = useState(false)
 
     const isDone = task.done === 'true' || task.done === 'TRUE'
 
-    const maxInputStyle = {
-        borderColor: 'red',
-        borderWidth: 1,
-    }
-    const focusStyle = {
-        borderColor: 'grey',
-        borderWidth: 1,
-    }
     const getInputStyle = () => {
-        if (input.length >= 30) return maxInputStyle
-        if (focus) return focusStyle
+        if (inputText.length >= 30) return maxInputStyle
+        if (isFocused) return focusStyle
+
+        return {}
     }
 
     const handleTaskChange = async () => {
@@ -46,7 +49,9 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
         const body = {
             id: task.id,
+            //Change it to task.name or task.title or task.text
             task: task.task,
+            //In these kind of things is recommended to leave a comment to indicate that the api don't accept boolean and you need to use strings
             done: 'true',
         }
 
@@ -57,7 +62,8 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
             if (!response.data) throw Error
 
-            fetchTodoList(['Changing data'])
+            //Why this is an array?
+            fetchTodoList('Changing data')
         } catch {
             setTimeout(() => {
                 setIsFetchError(true)
@@ -68,11 +74,12 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
     const handleEditTask = async () => {
         setIsShowingBottomSheets(false)
+
         setTimeout(() => {
             setIsLoading(true)
         }, 500)
 
-        if (!input.length) {
+        if (!inputText.length) {
             setIsShowingBottomSheets(true)
             Alert.alert('Input cannot be empty')
         }
@@ -81,7 +88,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
         const body = {
             id: task.id,
-            task: input,
+            task: inputText,
             done: task.done,
         }
 
@@ -92,7 +99,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
             if (!response.data) throw Error
 
-            fetchTodoList(['Editing data'])
+            fetchTodoList('Editing data')
         } catch {
             setTimeout(() => {
                 setIsFetchError(true)
@@ -102,12 +109,14 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
     }
 
     const toggleBottomNavigationView = () => {
-        setInput(task.task)
+        setInputText(task.task)
         setIsShowingBottomSheets(!isShowingBottomSheets)
     }
 
+    //This loadingModal is not a good name, it does much more than that, also, it should be a separated component instead of living on this screen
     const _loadingModal = () => (
         <>
+            {/* //Use styled components */}
             <View
                 style={{
                     height: 150,
@@ -118,17 +127,20 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
             >
                 <View>
                     <ModalInputContainer>
-                        <ModalInputCounter>{input.length}/30</ModalInputCounter>
+                        <ModalInputCounter>
+                            {inputText.length}/30
+                        </ModalInputCounter>
                     </ModalInputContainer>
+
                     <ModalInput
                         placeholder="Task name"
                         placeholderTextColor={colors.PLACEHOLDER_COLOR}
-                        onChangeText={(text) => setInput(text)}
-                        defaultValue={input}
+                        onChangeText={(text) => setInputText(text)}
+                        defaultValue={inputText}
                         maxLength={30}
                         style={getInputStyle()}
-                        onFocus={() => setFocus(true)}
-                        onBlur={() => setFocus(false)}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                     />
                     <View
                         style={{
@@ -142,6 +154,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
                         </SaveButton>
                     </View>
                 </View>
+
                 <View style={styles.bottomSheetButtonsView}>
                     <DeleteButton onPress={handleDeleteTask}>
                         <DoneButtonText>
@@ -155,6 +168,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
     const handleDeleteTask = async () => {
         setIsShowingBottomSheets(false)
+
         setTimeout(() => {
             setIsLoading(true)
         }, 500)
@@ -166,7 +180,7 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
 
             if (!response.data) throw Error
 
-            fetchTodoList(['Deleting data'])
+            fetchTodoList('Deleting data')
         } catch {
             setTimeout(() => {
                 setIsFetchError(true)
@@ -181,8 +195,10 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
                 <View style={styles.taskTextBox}>
                     <Text style={styles.taskText}>{task.task}</Text>
                 </View>
+
                 <View style={{ flexDirection: 'row' }}>
                     {isDone ? (
+                        // Try to use a better name, we should have the option to mark as done and not done the tasks instead of disabling it
                         <DoneButtonTrue disabled>
                             <DoneButtonText>
                                 <AntDesign
@@ -193,8 +209,11 @@ export const Task = ({ task, index, fetchTodoList, setIsLoading, setIsFetchError
                             </DoneButtonText>
                         </DoneButtonTrue>
                     ) : (
+                        /* //This should not be called DoneButton, this doesn't look like a done button */
                         <DoneButton onPress={handleTaskChange} />
                     )}
+
+                    {/* //This should not be called DoneButton, this doesn't look like a done button */}
                     <DoneButton
                         style={{ marginLeft: 10 }}
                         onPress={toggleBottomNavigationView}

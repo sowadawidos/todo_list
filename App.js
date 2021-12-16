@@ -2,7 +2,8 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { Home } from 'src/screens/Home/Home'
+//This is the correct way to do it, you just have 1 component, so is clear if you use export default on those cases
+import Home from 'src/screens/Home/Home'
 import { MainPage } from 'src/screens/MainPage/MainPage'
 import { colors } from 'src/theme'
 

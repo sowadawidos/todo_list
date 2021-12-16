@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
-    Alert,
     KeyboardAvoidingView,
     Platform,
     FlatList,
     Switch,
-    TouchableOpacity,
 } from 'react-native'
 
 import { Task } from 'src/screens/Task/Task'
@@ -22,63 +20,77 @@ import { ErrorFetchModal } from 'src/components/ErrorFetchModal/ErrorFetchModal'
 
 export const MainPage = () => {
     const [tasks, setTasks] = useState([])
-    const [filteredTask, setFilteredTask] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [isFetchError, setIsFetchError] = useState(false)
-
     const [intervalId, setIntervalId] = useState(null)
     const [loadingMsg, setLoadingMsg] = useState('')
+    const [isFilteringTasks, setIsFilteringTasks] = useState(false)
 
-    const [isFilteringTask, setIsFilteringTask] = useState(false)
+    const [filteredTasks, setFilteredTasks] = useState([])
 
-    const taskInputData =
-        isFilteringTask > 0 ? filteredTask.reverse() : tasks.reverse()
-    const flatListData = isFilteringTask ? filteredTask.reverse() : tasks.reverse()
-    const textMessage = isFilteringTask ? 'Show all tasks' : 'Show done tasks'
+    const flatListData = isFilteringTasks
+        ? filteredTasks.sort((a, b) => Number(-a.id) + Number(b.id))
+        : tasks.sort((a, b) => Number(-a.id) + Number(b.id))
+
+    const switchButtonText = isFilteringTasks
+        ? 'Show all tasks'
+        : 'Show done tasks'
+
+    const areTasksEmpty = tasks.length === 0 && !isLoading
+    const emptyTasksText = isFilteringTasks
+        ? 'No task completed'
+        : 'No task today'
 
     const toggleSwitch = () => {
-        const filteredTask = tasks.filter((task) => task.done === 'TRUE')
-        setIsFilteringTask((prev) => !prev)
-        setFilteredTask(filteredTask)
+        const filteredTasks = tasks.filter((task) => task.done === 'TRUE')
+
+        setIsFilteringTasks((prev) => !prev)
+        setFilteredTasks(filteredTasks)
     }
 
-    const text = ['Loading data', 'Wait a moment', 'Give us a moment']
+    const setLoadingMessage = (customText = '') => {
+        const textLoadingMessage = [
+            'Loading data',
+            'Wait a moment',
+            'Give us a moment',
+        ]
 
-    const setLoadingMessage = (loadingTxt = text) => {
+        const textForLoading = !customText ? textLoadingMessage : [customText]
+
         const intervalValue = 500
 
         const intervalIdVal = setInterval(() => {
             const randomTextValue =
-                loadingTxt[Math.floor(Math.random() * loadingTxt.length)]
+                textForLoading[
+                    Math.floor(Math.random() * textForLoading.length)
+                ]
+
             setLoadingMsg(randomTextValue)
         }, intervalValue)
 
         setIntervalId(intervalIdVal)
     }
 
-    const renderItem = ({ item }) => (
-        <Task
-            index={tasks.indexOf(item)}
-            task={item}
-            fetchTodoList={fetchTodoList}
-            setIsLoading={setIsLoading}
-            setIsFetchError={setIsFetchError}
-        />
-    )
+    const renderItem = ({ item }) => {
+        return (
+            <Task
+                //Hint: https://docs.sheet.best/#retrieving-different-data-formats-on-get
+                //It will be aiming to the wrong to-do on delete and update, use the hint I gave you
+                index={tasks.indexOf(item)}
+                task={item}
+                fetchTodoList={fetchTodoList}
+                setIsLoading={setIsLoading}
+                setIsFetchError={setIsFetchError}
+            />
+        )
+    }
 
-    const loadingModal = () => (
-        <LoadingIndicator
-            message={loadingMsg}
-            style={styles.loader}
-            color={colors.PLACEHOLDER_COLOR}
-            size={'large'}
-        />
-    )
-
-    const fetchTodoList = async (loadingMessage) => {
+    const fetchTodoList = async (loadingMessage = '') => {
         if (isFetchError) setIsFetchError(false)
+
         setLoadingMessage(loadingMessage)
         setIsLoading(true)
+
         try {
             const response = await fetchData('get')
 
@@ -97,18 +109,24 @@ export const MainPage = () => {
     }
 
     useEffect(() => {
-        fetchTodoList()
-
-        return () => clearInterval(intervalId)
-    }, [])
-
-    useEffect(() => {
-        if (!isFetchError) return
+        if (intervalId && isLoading) return
 
         clearInterval(intervalId)
-    }, [isFetchError])
+    }, [isLoading])
 
-    if (isLoading) return loadingModal()
+    useEffect(() => {
+        fetchTodoList()
+    }, [])
+
+    if (isLoading)
+        return (
+            <LoadingIndicator
+                message={loadingMsg}
+                style={styles.loader}
+                color={colors.PLACEHOLDER_COLOR}
+                size={'large'}
+            />
+        )
 
     return (
         <>
@@ -116,43 +134,43 @@ export const MainPage = () => {
                 {isFetchError && (
                     <ErrorFetchModal pressAction={fetchTodoList} />
                 )}
+
                 <View style={styles.taskBox}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     >
                         <View style={styles.inputBox}>
+                            {/* TaskInput should not be a screen */}
                             <TaskInput
-                                data={taskInputData}
+                                lastIdTask={Number(tasks?.[0]?.id) ?? 0}
                                 fetchTodoList={fetchTodoList}
                                 setIsLoading={setIsLoading}
                             />
+
                             <View style={styles.switchBox}>
                                 <Text style={{ marginRight: 15 }}>
-                                    {textMessage}
+                                    {switchButtonText}
                                 </Text>
+
                                 <Switch
                                     trackColor={{
                                         false: colors.SWITCH_FALSE_COLOR,
                                         true: colors.SWITCH_TRUE_COLOR,
                                     }}
                                     thumbColor={
-                                        isFilteringTask
+                                        isFilteringTasks
                                             ? colors.IS_ENABLED_TRUE_COLOR
                                             : colors.IS_ENABLED_FALSE_COLOR
                                     }
                                     ios_backgroundColor="#3e3e3e"
                                     onValueChange={toggleSwitch}
-                                    value={isFilteringTask}
+                                    value={isFilteringTasks}
                                 />
                             </View>
                         </View>
                     </KeyboardAvoidingView>
 
-                    {tasks.length === 0 && !isLoading && (
-                        <Text>
-                            {isFilteringTask ? 'No task completed' : 'No task today'}
-                        </Text>
-                    )}
+                    {areTasksEmpty && <Text>{emptyTasksText}</Text>}
 
                     <FlatList
                         data={flatListData}

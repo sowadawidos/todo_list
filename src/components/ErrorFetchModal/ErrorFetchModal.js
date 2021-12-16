@@ -6,6 +6,7 @@ export const ErrorFetchModal = ({ pressAction }) => {
     return (
         <View style={styles.errorFetchModalView}>
             <Text style={styles.errorFetchModalText}>There was an error</Text>
+
             <TouchableOpacity onPress={pressAction}>
                 <Text>Try Again</Text>
             </TouchableOpacity>

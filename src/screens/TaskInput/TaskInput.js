@@ -14,10 +14,15 @@ import {
 import { colors } from 'src/theme'
 import { fetchData } from 'src/api'
 
-export const TaskInput = ({fetchTodoList, setIsLoading }) => {
+export const TaskInput = ({ fetchTodoList, setIsLoading, lastIdTask }) => {
+    //name it inputText to be more specific
     const [input, setInput] = useState('')
+
+    //name it isFocused to be more specific
+    // You want to use the 'is' verb when is a boolean variable
     const [focus, setFocus] = useState(false)
 
+    //Use the pattern of the helpers file
     const maxInputStyle = {
         borderColor: 'red',
         borderWidth: 1,
@@ -26,6 +31,7 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
         borderColor: 'grey',
         borderWidth: 1,
     }
+
     const getInputStyle = () => {
         if (input.length >= 30) return maxInputStyle
         if (focus) return focusStyle
@@ -42,7 +48,7 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
         Keyboard.dismiss()
 
         const taskToPost = {
-            id: Date.now(),
+            id: lastIdTask + 1,
             task: input,
             done: 'false',
         }
@@ -54,10 +60,11 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList(['Adding new task'])
+            fetchTodoList('Adding new task')
 
             setInput('')
         } catch {
+            // I don't think makes sense here to call fetchTodoList, just show the alert that something failed, anyways the user can press the + button again, no need to re-fetch
             Alert.alert('Something went wrong. Try again.', '', [
                 {
                     text: 'Reload',
@@ -75,6 +82,7 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
                 <InputHeaderText>Create New Task</InputHeaderText>
                 <InputCounter>{input.length}/30</InputCounter>
             </InputHeader>
+
             <InputBox>
                 <Input
                     placeholder="Task name"
@@ -86,6 +94,7 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
                     onFocus={() => setFocus(true)}
                     onBlur={() => setFocus(false)}
                 />
+
                 <InputButton onPress={handleClick} type="submit">
                     <InputButtonText>+</InputButtonText>
                 </InputButton>

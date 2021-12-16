@@ -27,6 +27,7 @@ export const BottomSheets = ({
                             <Text style={styles.bottomSheetHeaderText}>
                                 {text}
                             </Text>
+
                             <BottomSheetHeaderClose
                                 onPress={toggleBottomNavigationView}
                             >
@@ -37,6 +38,8 @@ export const BottomSheets = ({
                                 />
                             </BottomSheetHeaderClose>
                         </BottomSheetHeaderBox>
+
+                        {/* // Why not use React.children? instead of this loadingModal() thing */}
                         {loadingModal()}
                     </View>
                 </KeyboardAvoidingView>
