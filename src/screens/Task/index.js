@@ -7,14 +7,14 @@ import {
     ChangeToFalseText,
     ChangeToFalseButton,
     BoxForTasks,
-    BottomNavigationButton
+    BottomNavigationButton,
 } from './styled'
 
 import { styles } from 'src/styles'
 
 import { fetchData } from 'src/api'
 
-import BottomSheets from 'src/components/BottomSheets'
+import BottomSheet from 'src/components/BottomSheet'
 import BottomModal from 'src/screens/BottomModal'
 
 import { maxInputStyle, focusStyle } from './helpers'
@@ -49,7 +49,6 @@ export default function Task({
             index: task.index,
         }
 
-        console.log(body)
         try {
             const response = await fetchData(
                 'put',
@@ -118,10 +117,7 @@ export default function Task({
 
     const handleDeleteTask = async () => {
         setIsShowingBottomSheets(false)
-
-        setTimeout(() => {
-            setIsLoading(true)
-        }, 500)
+        setIsLoading(true)
 
         try {
             const response = await fetchData(
@@ -172,7 +168,7 @@ export default function Task({
                     </BottomNavigationButton>
                 </View>
             </BoxForTasks>
-            <BottomSheets
+            <BottomSheet
                 text={'Edit task'}
                 isShowingBottomSheets={isShowingBottomSheets}
                 toggleBottomNavigationView={toggleBottomNavigationView}
@@ -185,7 +181,7 @@ export default function Task({
                     setInputText={setInputText}
                     setIsFocused={setIsFocused}
                 />
-            </BottomSheets>
+            </BottomSheet>
         </>
     )
 }

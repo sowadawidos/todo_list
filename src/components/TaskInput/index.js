@@ -13,7 +13,7 @@ import {
 
 import { colors } from 'src/theme'
 import { fetchData } from 'src/api'
-import { maxInputStyle, focusStyle } from 'src/screens/Task/helpers'
+import { maxInputStyle, focusStyle } from './helpers'
 
 export default function TaskInput({
     fetchTodoList,
@@ -76,7 +76,7 @@ export default function TaskInput({
 
             <InputBox>
                 <Input
-                    placeholder="Index name"
+                    placeholder="Task name"
                     placeholderTextColor={colors.PLACEHOLDER_COLOR}
                     onChangeText={(text) => setInputText(text)}
                     defaultValue={inputText}

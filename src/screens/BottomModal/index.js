@@ -8,6 +8,7 @@ import {
     ModalInputCounter,
     SaveButton,
     BottomModalView,
+    SaveButtonBox,
 } from './styled'
 
 import { colors } from 'src/theme'
@@ -33,7 +34,7 @@ export default function BottomModal({
                     </ModalInputContainer>
 
                     <ModalInput
-                        placeholder="Index name"
+                        placeholder="Task name"
                         placeholderTextColor={colors.PLACEHOLDER_COLOR}
                         onChangeText={(text) => setInputText(text)}
                         defaultValue={inputText}
@@ -42,17 +43,11 @@ export default function BottomModal({
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                     />
-                    <View
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                        }}
-                    >
+                    <SaveButtonBox>
                         <SaveButton onPress={handleEditTask}>
                             <Text>Save</Text>
                         </SaveButton>
-                    </View>
+                    </SaveButtonBox>
                 </View>
 
                 <View style={styles.bottomSheetButtonsView}>

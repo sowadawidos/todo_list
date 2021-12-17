@@ -64,3 +64,9 @@ export const BottomModalView = styled.View({
     flexDirection: 'row',
     justifyContent: 'center',
 })
+
+export const SaveButtonBox = styled.View({
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+})
