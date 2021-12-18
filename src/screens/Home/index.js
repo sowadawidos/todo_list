@@ -2,21 +2,26 @@ import React from 'react'
 
 import { View, StatusBar } from 'react-native'
 
-import { HeaderText } from 'src/components/HeaderText/HeaderText'
-import { MainButtons } from 'src/components/MainButtons/MainButtons'
+import HeaderText from 'src/components/HeaderText'
+import MainButton from 'src/components/MainButton'
 
 import { styles } from 'src/styles'
 
-export const Home = ({ navigation }) => {
+export default function Home({ navigation }) {
     return (
         <>
             <StatusBar barStyle="dark-content" />
+
             <View style={styles.mainBox}>
                 <View style={styles.headerBox}>
-                    <HeaderText text1={"Todo"} text2={"list"}/>
+                    <HeaderText text1="Todo" text2="list" />
                 </View>
+
                 <View style={styles.mainButtonsBox}>
-                    <MainButtons action={() => navigation.navigate('MainPage')} text={"Move to tasks"}/>
+                    <MainButton
+                        action={() => navigation.navigate('MainPage')}
+                        text="Move to tasks"
+                    />
                 </View>
             </View>
         </>

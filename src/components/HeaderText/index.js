@@ -2,7 +2,7 @@ import React from 'react'
 
 import { HeaderText1, HeaderText2 } from './styled'
 
-export const HeaderText = ({text1, text2}) => {
+export default function HeaderText({ text1, text2 }) {
     return (
         <>
             <HeaderText1>{text1}</HeaderText1>

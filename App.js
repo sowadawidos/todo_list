@@ -2,8 +2,8 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { Home } from 'src/screens/Home/Home'
-import { MainPage } from 'src/screens/MainPage/MainPage'
+import Home from 'src/screens/Home'
+import MainPage from 'src/screens/MainPage'
 import { colors } from 'src/theme'
 
 const Stack = createNativeStackNavigator()

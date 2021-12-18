@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StyledTextButton, StyledButton } from './styled'
 
-export const MainButtons = ({ action, text }) => {
+export default function MainButton({ action, text }) {
     return (
         <>
             <StyledButton onPress={action}>

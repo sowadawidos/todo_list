@@ -13,28 +13,29 @@ import {
 
 import { colors } from 'src/theme'
 import { fetchData } from 'src/api'
+import { maxInputStyle, focusStyle } from './helpers'
 
-export const TaskInput = ({fetchTodoList, setIsLoading }) => {
-    const [input, setInput] = useState('')
-    const [focus, setFocus] = useState(false)
+export default function TaskInput({
+    fetchTodoList,
+    setIsLoading,
+    taskCount,
+    setIsFetchError,
+}) {
+    const [inputText, setInputText] = useState('')
 
-    const maxInputStyle = {
-        borderColor: 'red',
-        borderWidth: 1,
-    }
-    const focusStyle = {
-        borderColor: 'grey',
-        borderWidth: 1,
-    }
+    const [isFocused, setIsFocused] = useState(false)
+
     const getInputStyle = () => {
-        if (input.length >= 30) return maxInputStyle
-        if (focus) return focusStyle
+        if (inputText.length >= 30) return maxInputStyle
+        if (isFocused) return focusStyle
+
+        return {}
     }
 
     const handleClick = async () => {
         setIsLoading(true)
 
-        if (!input.length) {
+        if (!inputText.length) {
             Alert.alert('Input cannot be empty')
             return fetchTodoList()
         }
@@ -43,8 +44,8 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
 
         const taskToPost = {
             id: Date.now(),
-            task: input,
-            //QUESTION: Why false is string and not a boolean value?
+            name: inputText,
+            index: taskCount + 1,
             done: 'false',
         }
 
@@ -55,38 +56,36 @@ export const TaskInput = ({fetchTodoList, setIsLoading }) => {
 
             if (!response.data) throw Error
 
-            fetchTodoList(['Adding new task'])
+            fetchTodoList('Adding new task')
 
-            setInput('')
+            setInputText('')
         } catch {
-            Alert.alert('Something went wrong. Try again.', '', [
-                {
-                    text: 'Reload',
-                    onPress: () => fetchTodoList(),
-                    style: 'cancel',
-                },
-                { text: 'Cancel', onPress: () => setIsLoading(false) },
-            ])
+            setTimeout(() => {
+                setIsFetchError(true)
+                setIsLoading(false)
+            }, 3000)
         }
     }
 
     return (
         <>
             <InputHeader>
-                <InputHeaderText>Create New Task</InputHeaderText>
-                <InputCounter>{input.length}/30</InputCounter>
+                <InputHeaderText>Create New Index</InputHeaderText>
+                <InputCounter>{inputText.length}/30</InputCounter>
             </InputHeader>
+
             <InputBox>
                 <Input
                     placeholder="Task name"
                     placeholderTextColor={colors.PLACEHOLDER_COLOR}
-                    onChangeText={(text) => setInput(text)}
-                    defaultValue={input}
+                    onChangeText={(text) => setInputText(text)}
+                    defaultValue={inputText}
                     maxLength={30}
                     style={getInputStyle()}
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                 />
+
                 <InputButton onPress={handleClick} type="submit">
                     <InputButtonText>+</InputButtonText>
                 </InputButton>

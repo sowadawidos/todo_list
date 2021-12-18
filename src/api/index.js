@@ -1,14 +1,14 @@
 import axios from 'axios'
 
-import { API_URLL } from '@env'
+const API_URL =
+    'https://sheet.best/api/sheets/8032dfa7-ce66-4f6c-ae98-e488176d3f5e'
 
 export const fetchData = async (method, body = null, path = '') => {
-    console.log(API_URLL)
 
     try {
         const response = await axios({
             method,
-            url: `${API_URLL}${path}`,
+            url: `${API_URL}${path}`,
             data: body ? { ...body } : undefined,
         })
 

@@ -6,12 +6,12 @@ import { BottomSheet } from 'react-native-btr'
 import { BottomSheetHeaderBox, BottomSheetHeaderClose } from './styled'
 import { AntDesign } from '@expo/vector-icons'
 
-export const BottomSheets = ({
+export default function BottomSheets({
     isShowingBottomSheets,
     toggleBottomNavigationView,
-    loadingModal,
     text,
-}) => {
+    children,
+}) {
     return (
         <>
             <BottomSheet
@@ -27,6 +27,7 @@ export const BottomSheets = ({
                             <Text style={styles.bottomSheetHeaderText}>
                                 {text}
                             </Text>
+
                             <BottomSheetHeaderClose
                                 onPress={toggleBottomNavigationView}
                             >
@@ -37,7 +38,7 @@ export const BottomSheets = ({
                                 />
                             </BottomSheetHeaderClose>
                         </BottomSheetHeaderBox>
-                        {loadingModal()}
+                        {children}
                     </View>
                 </KeyboardAvoidingView>
             </BottomSheet>

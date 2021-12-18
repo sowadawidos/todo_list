@@ -1,5 +1,5 @@
 import styled from '@emotion/native'
-import { colors } from '../../theme'
+import { colors } from 'src/theme'
 import { Platform } from 'react-native'
 
 export const StyledButton = styled.TouchableOpacity({
