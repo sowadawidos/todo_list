@@ -6,7 +6,7 @@ import { BottomSheet } from 'react-native-btr'
 import { BottomSheetHeaderBox, BottomSheetHeaderClose } from './styled'
 import { AntDesign } from '@expo/vector-icons'
 
-export default function BottomSheets({
+export default function BottomSheetModal({
     isShowingBottomSheets,
     toggleBottomNavigationView,
     text,
