@@ -13,7 +13,7 @@ import {
 
 import { styles } from 'src/styles'
 
-import { fetchData } from 'src/api'
+import fetchData from 'src/api'
 
 import BottomSheetModal from 'src/components/BottomSheet'
 import BottomModal from 'src/screens/BottomModal'
@@ -21,10 +21,10 @@ import BottomModal from 'src/screens/BottomModal'
 import { maxInputStyle, focusStyle } from './helpers'
 
 type Props = {
-    task: Object,
-    fetchTodoList: Function,
-    setIsLoading: Function,
-    setIsFetchError: Function,
+    task: taskBody,
+    fetchTodoList: (string) => Promise<void>,
+    setIsLoading: (boolean) => void,
+    setIsFetchError: (boolean) => void,
 }
 
 type taskBody = {
@@ -39,13 +39,11 @@ export default function Task({
     fetchTodoList,
     setIsLoading,
     setIsFetchError,
-}: Props) {
-    const [isShowingBottomSheets, setIsShowingBottomSheets]: [
-        boolean,
-        Function
-    ] = useState(false)
-    const [inputText, setInputText]: [string, Function] = useState('')
-    const [isFocused, setIsFocused]: [boolean, Function] = useState(false)
+}: Props): React$MixedElement {
+    const [isShowingBottomSheets: boolean, setIsShowingBottomSheets] =
+        useState(false)
+    const [inputText: string, setInputText] = useState('')
+    const [isFocused: boolean, setIsFocused] = useState(false)
 
     const isDone: boolean = task.done === 'true' || task.done === 'TRUE'
 

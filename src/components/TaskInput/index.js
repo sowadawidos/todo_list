@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react'
 import { Keyboard, Alert } from 'react-native'
 
@@ -12,18 +13,32 @@ import {
 } from './styled'
 
 import { colors } from 'src/theme'
-import { fetchData } from 'src/api'
+import fetchData from 'src/api'
 import { maxInputStyle, focusStyle } from './helpers'
+
+type Props = {
+    fetchTodoList: Function,
+    setIsLoading: Function,
+    taskCount: number,
+    setIsFetchError: Function,
+}
+
+type TaskData = {
+    id: number,
+    name: string,
+    index: number,
+    done: string,
+}
 
 export default function TaskInput({
     fetchTodoList,
     setIsLoading,
     taskCount,
     setIsFetchError,
-}) {
-    const [inputText, setInputText] = useState('')
+}: Props): React$MixedElement{
+    const [inputText, setInputText]: [string, Function] = useState('')
 
-    const [isFocused, setIsFocused] = useState(false)
+    const [isFocused, setIsFocused]: [boolean, Function] = useState(false)
 
     const getInputStyle = () => {
         if (inputText.length >= 30) return maxInputStyle
@@ -42,7 +57,7 @@ export default function TaskInput({
 
         Keyboard.dismiss()
 
-        const taskToPost = {
+        const taskToPost: TaskData = {
             id: Date.now(),
             name: inputText,
             index: taskCount + 1,

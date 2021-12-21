@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import { Text, View } from 'react-native'
 import {
@@ -15,6 +16,15 @@ import { colors } from 'src/theme'
 import { styles } from 'src/styles'
 import { EvilIcons } from '@expo/vector-icons'
 
+type Props = {
+    inputText: string,
+    setInputText: Function,
+    setIsFocused: Function,
+    handleEditTask: Function,
+    handleDeleteTask: Function,
+    getInputStyle: Function,
+}
+
 export default function BottomModal({
     inputText,
     setInputText,
@@ -22,7 +32,7 @@ export default function BottomModal({
     handleEditTask,
     handleDeleteTask,
     getInputStyle,
-}) {
+}: Props): React$MixedElement {
     return (
         <>
             <BottomModalView>
