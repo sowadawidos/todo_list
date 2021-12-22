@@ -10,8 +10,8 @@ type taskBody = {
     done: string,
     index: number,
 }
-// need to add return function type
-export default async function fetchData(method: string, body: taskBody | null = null, path: string = ''){
+
+export default async function fetchData(method: string, body: taskBody | null = null, path: string = ''):  Promise<any>{
     try {
         const response = await axios({
             method,

@@ -1,8 +1,8 @@
 // @flow
+import { BottomSheet } from 'react-native-btr'
 import * as React from 'react'
 import { View, Text, Platform, KeyboardAvoidingView } from 'react-native'
 import { styles } from 'src/styles'
-import { BottomSheet } from 'react-native-btr'
 // cannot resolve module 'react-native-btr'
 import { BottomSheetHeaderBox, BottomSheetHeaderClose } from './styled'
 import { AntDesign } from '@expo/vector-icons'
