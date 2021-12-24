@@ -50,7 +50,7 @@ export default function MainPage(): React$MixedElement {
         : 'No task today'
 
     const toggleSwitch = () => {
-        const filteredTasks: Object = tasks.filter(
+        const filteredTasks: Array<taskBody> = tasks.filter(
             (task) => task.done === 'TRUE'
         )
 

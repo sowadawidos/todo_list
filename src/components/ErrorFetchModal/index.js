@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { styles } from 'src/styles'
 
 type Props = {
-    pressAction: Function
+    pressAction: () => Promise<void>,
 }
 
 export default function ErrorFetchModal({ pressAction }: Props): React$MixedElement {

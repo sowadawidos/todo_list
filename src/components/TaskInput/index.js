@@ -17,10 +17,10 @@ import fetchData from 'src/api'
 import { maxInputStyle, focusStyle } from './helpers'
 
 type Props = {
-    fetchTodoList: Function,
-    setIsLoading: Function,
+    fetchTodoList: (string) => Promise<void>,
+    setIsLoading: (boolean) => void,
     taskCount: number,
-    setIsFetchError: Function,
+    setIsFetchError: (boolean) => void,
 }
 
 type TaskData = {
@@ -36,9 +36,9 @@ export default function TaskInput({
     taskCount,
     setIsFetchError,
 }: Props): React$MixedElement{
-    const [inputText, setInputText]: [string, Function] = useState('')
+    const [inputText: string, setInputText] = useState('')
 
-    const [isFocused, setIsFocused]: [boolean, Function] = useState(false)
+    const [isFocused: boolean, setIsFocused] = useState(false)
 
     const getInputStyle = () => {
         if (inputText.length >= 30) return maxInputStyle
@@ -52,7 +52,7 @@ export default function TaskInput({
 
         if (!inputText.length) {
             Alert.alert('Input cannot be empty')
-            return fetchTodoList()
+            return fetchTodoList("Loading")
         }
 
         Keyboard.dismiss()

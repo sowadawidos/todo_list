@@ -4,7 +4,7 @@ import React from 'react'
 import { StyledTextButton, StyledButton } from './styled'
 
 type Props = {
-    action: Function,
+    action: () => void,
     text: string
 }
 

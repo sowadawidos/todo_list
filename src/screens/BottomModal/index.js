@@ -18,11 +18,11 @@ import { EvilIcons } from '@expo/vector-icons'
 
 type Props = {
     inputText: string,
-    setInputText: Function,
-    setIsFocused: Function,
-    handleEditTask: Function,
-    handleDeleteTask: Function,
-    getInputStyle: Function,
+    setInputText: (string) => void,
+    setIsFocused: (boolean) => void,
+    handleEditTask: () => Promise<void>,
+    handleDeleteTask: () => Promise<void>,
+    getInputStyle: () => {},
 }
 
 export default function BottomModal({
