@@ -73,7 +73,7 @@ export default function TaskInput({
 
             fetchTodoList('Adding new task')
 
-            setInputText('')
+            return () => setInputText('')
         } catch {
             setTimeout(() => {
                 setIsFetchError(true)
