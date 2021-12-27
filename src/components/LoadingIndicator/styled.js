@@ -8,6 +8,7 @@ export const MessageText = styled.Text({
 export const LoadingIndicatorBox = styled.View({
     position: 'absolute',
     top: '40%',
+    right: '27%',
     padding: 36,
     backgroundColor: 'gray',
     zIndex: 3,

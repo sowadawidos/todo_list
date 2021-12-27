@@ -1,3 +1,4 @@
+// @flow
 import React, { useState, useEffect } from 'react'
 
 import {
@@ -14,50 +15,61 @@ import TaskInput from 'src/components/TaskInput'
 
 import { styles } from 'src/styles'
 import { colors } from 'src/theme'
-import { fetchData } from 'src/api'
+import fetchData from 'src/api'
 import LoadingIndicator from 'src/components/LoadingIndicator'
 import ErrorFetchModal from 'src/components/ErrorFetchModal'
 
-export default function MainPage() {
-    const [tasks, setTasks] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    const [isFetchError, setIsFetchError] = useState(false)
+type taskBody = {
+    id: number,
+    name: string,
+    done: string,
+    index: number,
+}
+
+export default function MainPage(): React$MixedElement {
+    const [tasks: Array<taskBody>, setTasks] = useState([])
+    const [isLoading: boolean, setIsLoading] = useState(false)
+    const [isFetchError: boolean, setIsFetchError] = useState(false)
     const [intervalId, setIntervalId] = useState(null)
-    const [loadingMsg, setLoadingMsg] = useState('')
-    const [isFilteringTasks, setIsFilteringTasks] = useState(false)
+    const [loadingMsg: string, setLoadingMsg] = useState('')
+    const [isFilteringTasks: boolean, setIsFilteringTasks] = useState(false)
 
-    const [filteredTasks, setFilteredTasks] = useState([])
+    const [filteredTasks: Array<taskBody>, setFilteredTasks] = useState([])
 
-    const flatListData = isFilteringTasks
+    const flatListData: Array<taskBody> = isFilteringTasks
         ? filteredTasks.sort((a, b) => Number(-a.id) + Number(b.id))
         : tasks.sort((a, b) => Number(-a.id) + Number(b.id))
 
-    const switchButtonText = isFilteringTasks
+    const switchButtonText: string = isFilteringTasks
         ? 'Show all tasks'
         : 'Show done tasks'
 
-    const areTasksEmpty = tasks.length === 0 && !isLoading
-    const emptyTasksText = isFilteringTasks
+    const areTasksEmpty: boolean = tasks.length === 0 && !isLoading
+    const emptyTasksText: string = isFilteringTasks
         ? 'No task completed'
         : 'No task today'
 
     const toggleSwitch = () => {
-        const filteredTasks = tasks.filter((task) => task.done === 'TRUE')
+        const filteredTasks: Array<taskBody> = tasks.filter(
+            (task) => task.done === 'TRUE'
+        )
 
         setIsFilteringTasks((prev) => !prev)
         setFilteredTasks(filteredTasks)
     }
 
     const setLoadingMessage = (customText = '') => {
-        const textLoadingMessage = [
+        const textLoadingMessage: string[] = [
             'Loading data',
             'Wait a moment',
             'Give us a moment',
         ]
 
-        const textForLoading = !customText ? textLoadingMessage : [customText]
+        const textForLoading: string | string[] = !customText
+            ? textLoadingMessage
+            : [customText]
 
-        const intervalValue = 500
+        const intervalValue: number = 500
 
         const intervalIdVal = setInterval(() => {
             const randomTextValue =
@@ -82,7 +94,7 @@ export default function MainPage() {
         )
     }
 
-    const fetchTodoList = async (loadingMessage = '') => {
+    const fetchTodoList = async (loadingMessage: string = '') => {
         if (isFetchError) setIsFetchError(false)
 
         setLoadingMessage(loadingMessage)
@@ -137,7 +149,6 @@ export default function MainPage() {
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     >
                         <View style={styles.inputBox}>
-                            {/* TaskInput should not be a screen */}
                             <TaskInput
                                 taskCount={tasks.length}
                                 fetchTodoList={fetchTodoList}
@@ -173,7 +184,7 @@ export default function MainPage() {
                     <FlatList
                         data={flatListData}
                         renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => item.id.toString()}
                     />
                 </View>
             </View>

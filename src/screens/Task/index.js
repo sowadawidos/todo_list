@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react'
 import { View, Text, Alert, Keyboard } from 'react-native'
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -12,24 +13,39 @@ import {
 
 import { styles } from 'src/styles'
 
-import { fetchData } from 'src/api'
+import fetchData from 'src/api'
 
-import BottomSheet from 'src/components/BottomSheet'
+import BottomSheetModal from 'src/components/BottomSheet'
 import BottomModal from 'src/screens/BottomModal'
 
 import { maxInputStyle, focusStyle } from './helpers'
+
+type Props = {
+    task: taskBody,
+    fetchTodoList: (string) => Promise<void>,
+    setIsLoading: (boolean) => void,
+    setIsFetchError: (boolean) => void,
+}
+
+type taskBody = {
+    id: number,
+    name: string,
+    done: string,
+    index: number,
+}
 
 export default function Task({
     task,
     fetchTodoList,
     setIsLoading,
     setIsFetchError,
-}) {
-    const [isShowingBottomSheets, setIsShowingBottomSheets] = useState(false)
-    const [inputText, setInputText] = useState('')
-    const [isFocused, setIsFocused] = useState(false)
+}: Props): React$MixedElement {
+    const [isShowingBottomSheets: boolean, setIsShowingBottomSheets] =
+        useState(false)
+    const [inputText: string, setInputText] = useState('')
+    const [isFocused: boolean, setIsFocused] = useState(false)
 
-    const isDone = task.done === 'true' || task.done === 'TRUE'
+    const isDone: boolean = task.done === 'true' || task.done === 'TRUE'
 
     const getInputStyle = () => {
         if (inputText.length >= 30) return maxInputStyle
@@ -41,7 +57,7 @@ export default function Task({
     const handleTaskChange = async () => {
         setIsLoading(true)
 
-        const body = {
+        const body: taskBody = {
             id: task.id,
             name: task.name,
             //api don't accept boolean and I need to use string
@@ -83,7 +99,7 @@ export default function Task({
 
         Keyboard.dismiss()
 
-        const body = {
+        const body: taskBody = {
             id: task.id,
             name: inputText,
             done: task.done,
@@ -168,7 +184,7 @@ export default function Task({
                     </BottomNavigationButton>
                 </View>
             </BoxForTasks>
-            <BottomSheet
+            <BottomSheetModal
                 text={'Edit task'}
                 isShowingBottomSheets={isShowingBottomSheets}
                 toggleBottomNavigationView={toggleBottomNavigationView}
@@ -181,7 +197,7 @@ export default function Task({
                     setInputText={setInputText}
                     setIsFocused={setIsFocused}
                 />
-            </BottomSheet>
+            </BottomSheetModal>
         </>
     )
 }

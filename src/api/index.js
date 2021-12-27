@@ -1,10 +1,17 @@
+// @flow
 import axios from 'axios'
 
 const API_URL =
     'https://sheet.best/api/sheets/8032dfa7-ce66-4f6c-ae98-e488176d3f5e'
 
-export const fetchData = async (method, body = null, path = '') => {
+type taskBody = {
+    id: number,
+    name: string,
+    done: string,
+    index: number,
+}
 
+export default async function fetchData(method: string, body: taskBody | null = null, path: string = ''):  Promise<any>{
     try {
         const response = await axios({
             method,

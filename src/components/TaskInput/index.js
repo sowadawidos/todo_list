@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react'
 import { Keyboard, Alert } from 'react-native'
 
@@ -12,18 +13,32 @@ import {
 } from './styled'
 
 import { colors } from 'src/theme'
-import { fetchData } from 'src/api'
+import fetchData from 'src/api'
 import { maxInputStyle, focusStyle } from './helpers'
+
+type Props = {
+    fetchTodoList: (string) => Promise<void>,
+    setIsLoading: (boolean) => void,
+    taskCount: number,
+    setIsFetchError: (boolean) => void,
+}
+
+type TaskData = {
+    id: number,
+    name: string,
+    index: number,
+    done: string,
+}
 
 export default function TaskInput({
     fetchTodoList,
     setIsLoading,
     taskCount,
     setIsFetchError,
-}) {
-    const [inputText, setInputText] = useState('')
+}: Props): React$MixedElement{
+    const [inputText: string, setInputText] = useState('')
 
-    const [isFocused, setIsFocused] = useState(false)
+    const [isFocused: boolean, setIsFocused] = useState(false)
 
     const getInputStyle = () => {
         if (inputText.length >= 30) return maxInputStyle
@@ -37,12 +52,12 @@ export default function TaskInput({
 
         if (!inputText.length) {
             Alert.alert('Input cannot be empty')
-            return fetchTodoList()
+            return fetchTodoList("Loading")
         }
 
         Keyboard.dismiss()
 
-        const taskToPost = {
+        const taskToPost: TaskData = {
             id: Date.now(),
             name: inputText,
             index: taskCount + 1,
@@ -58,7 +73,7 @@ export default function TaskInput({
 
             fetchTodoList('Adding new task')
 
-            setInputText('')
+            return () => setInputText('')
         } catch {
             setTimeout(() => {
                 setIsFetchError(true)

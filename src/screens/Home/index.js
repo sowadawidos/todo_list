@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 
 import { View, StatusBar } from 'react-native'
@@ -7,7 +8,11 @@ import MainButton from 'src/components/MainButton'
 
 import { styles } from 'src/styles'
 
-export default function Home({ navigation }) {
+type Props = {
+    navigation: Object,
+}
+
+export default function Home({ navigation }: Props): React$MixedElement {
     return (
         <>
             <StatusBar barStyle="dark-content" />
