@@ -1,0 +1,17 @@
+export const colors = {
+    BORDER_COLOR: '#242424',
+    SECOND_BORDER_COLOR: 'black',
+    BACKGROUND_INPUT_COLOR: 'rgba(119, 239, 207, 0.2)',
+    TASK_DONE_COLOR: 'limegreen',
+    BACKGROUND_COLOR: 'rgba(119, 239, 207, 0.1)',
+    DELETE_BUTTON: '#f15555',
+    HEADER_NAV_COLOR: 'rgba(119,239,207,0.1)',
+    BUTTON_COLOR: 'rgba(119, 239, 207, 0.6)',
+    PLACEHOLDER_COLOR: '#333333',
+    SWITCH_FALSE_COLOR: '#767577',
+    SWITCH_TRUE_COLOR: '#bfeeb8',
+    IS_ENABLED_TRUE_COLOR: '#52e349',
+    IS_ENABLED_FALSE_COLOR: '#f4f3f4',
+    BUTTON_DONE_COLOR: '#ffffff',
+    SWITCH_IOS_BACKGROUND_COLOR: '#3e3e3e',
+}

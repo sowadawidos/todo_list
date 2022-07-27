@@ -1,27 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View } from 'react-native';
-import { Home } from './components/Home'
-import { MainPage } from "./components/MainPage";
-import { DoneTasks } from "./components/DoneTasks";
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const Stack = createNativeStackNavigator();
+import Home from 'src/screens/Home'
+import MainPage from 'src/screens/MainPage'
+import { colors } from 'src/theme'
+
+const Stack = createNativeStackNavigator()
 
 export default function App() {
-  return (
-      <NavigationContainer>
-          <Stack.Navigator >
-              <Stack.Screen
-                  name="Home"
-                  component={Home}
-              />
-              <Stack.Screen name="MainPage" options={{ title: 'Today' }} component={MainPage} />
-              <Stack.Screen name="DoneTasks" options={{ title: 'Done' }} component={DoneTasks} />
-          </Stack.Navigator>
-      </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={{
+                        title: '',
+                        headerStyle: {
+                            backgroundColor: colors.HEADER_NAV_COLOR,
+                        },
+                        headerShadowVisible: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="MainPage"
+                    options={{
+                        title: '',
+                        headerStyle: {
+                            backgroundColor: colors.HEADER_NAV_COLOR,
+                            borderWidth: 0,
+                        },
+                        headerShadowVisible: false,
+                    }}
+                    component={MainPage}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
-
-
